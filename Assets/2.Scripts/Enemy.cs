@@ -122,7 +122,7 @@ public class Enemy : MonoBehaviour
         {
             box.enabled = false;
             Instantiate(coin, gameObject.transform.position, Quaternion.identity);
-            Instantiate(tree, gameObject.transform.position, Quaternion.Euler(0, 0, -90));
+            //Instantiate(tree, gameObject.transform.position, Quaternion.Euler(0, 0, -90));
             StartCoroutine(die());
         }
     }

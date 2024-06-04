@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class QuestManager : MonoBehaviour
 {
+    [SerializeField] GameObject portal1;
+    [SerializeField] GameObject questUpArrow;
+
     [SerializeField] GameObject questObj1;
     [SerializeField] GameObject questF;
 
     [SerializeField] float distance;
 
-    void Start()
+    private void Awake()
     {
-        
     }
 
     void Update()
     {
         quest1();
     }
+
 
     private void quest1()
     {

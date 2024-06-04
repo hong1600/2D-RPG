@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject player;
 
+
     private void Awake()
     {
         if (instance == null)
@@ -22,7 +23,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
-    private void Update()
+    private void Start()
     {
     }
 

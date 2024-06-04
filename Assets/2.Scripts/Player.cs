@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -260,6 +261,7 @@ public class Player : MonoBehaviour
     //    }
     //}
 
+
     private void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.collider.CompareTag("Enemy") && curHp > 0 && isHurt == false)
@@ -271,12 +273,14 @@ public class Player : MonoBehaviour
         {
             StartCoroutine(die());
         }
+
         if (coll.collider.CompareTag("Coin"))
         {
             playerScore += 1f;
             Destroy(coll.gameObject);
         }
     }
+
 
     IEnumerator hurt()
     {
