@@ -6,7 +6,8 @@ using Cinemachine;
 public class FollowCam : MonoBehaviour
 {
     CinemachineVirtualCamera cam;
-    Transform player;
+    GameObject player;
+    Transform playerTrs;
 
     private void Awake()
     {
@@ -18,6 +19,14 @@ public class FollowCam : MonoBehaviour
     {
         if (player == null)
         {
+            player = GameObject.FindWithTag("Player");
+
+            if(player != null) 
+            {
+                playerTrs = player.transform;
+                cam.Follow = playerTrs;
+                cam.LookAt = playerTrs;
+            }
         }
     }
 }

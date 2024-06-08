@@ -7,14 +7,23 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
+    public static Player instance;
+
     Rigidbody2D rigid;
     Animator anim;
     CapsuleCollider2D cap;
     SpriteRenderer sprite;
 
+    [SerializeField] float maxHp;
+    [SerializeField] float curHp;
+    [SerializeField] float maxMp;
+    [SerializeField] float curMp;
+    [SerializeField] float maxExp;
+    [SerializeField] float curExp;
     [SerializeField] float moveSpeed;
     [SerializeField] float jumpForce;
     [SerializeField] float dJumpForce;
+    [SerializeField] float dashSpeed;
     [SerializeField] float knockBackPower;
     [SerializeField] GameObject swordBox;
     [SerializeField] GameObject fireBall;
@@ -24,7 +33,6 @@ public class Player : MonoBehaviour
     [SerializeField] float fallSpeed;
     [SerializeField] float walldistance;
     [SerializeField] float wallJump;
-    [SerializeField] float dashSpeed;
 
     public bool isGround;
     bool isMove;
@@ -39,12 +47,27 @@ public class Player : MonoBehaviour
     float isRight;
     //bool isdash = false;
 
-    [SerializeField] float maxHp;
-    [SerializeField] float curHp;
     public float playerScore = 0f;
+
+    public float Stat
+    {
+        get { return curHp; }
+    }
 
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+
+        DontDestroyOnLoad(this.gameObject);
+
+
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         cap = GetComponent<CapsuleCollider2D>();
@@ -100,7 +123,7 @@ public class Player : MonoBehaviour
 
         Vector2 movePos = rigid.velocity;
 
-        if(isMove == true && isWallJump == false)
+        if(isMove == true && isWallJump == false && isSkill1 == false)
         {
             movePos.x = moveInput * moveSpeed;
         }
@@ -201,13 +224,11 @@ public class Player : MonoBehaviour
         anim.SetBool("isSkill1", true);
         isSkill1 = true;
         Instantiate(fireBall, fireBallTrs.position, Quaternion.Euler(0, 0, 40));
-        isMove = false;
 
         yield return new WaitForSeconds(0.5f);
 
         anim.SetBool("isSkill1", false);
         isSkill1 = false;
-        isMove = true;
     }
 
     private void checkWall()
@@ -251,6 +272,7 @@ public class Player : MonoBehaviour
     private void wallJumpFalse()
     {
         isWallJump = false;
+        isMove = false;
     }
 
     //private void dash()

@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour
     bool nTracking;
     bool isHurt;
     bool moving;
-
+    
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -115,7 +115,7 @@ public class Enemy : MonoBehaviour
     {
         if (coll.gameObject.CompareTag("PlayerSword") && curHp > 0)
         {
-            StartCoroutine(hurt());
+            StartCoroutine(hurt(1));
             StartCoroutine(knockBack());
         }
         else if (coll.gameObject.CompareTag("PlayerSword") && curHp <= 0)
@@ -125,11 +125,26 @@ public class Enemy : MonoBehaviour
             //Instantiate(tree, gameObject.transform.position, Quaternion.Euler(0, 0, -90));
             StartCoroutine(die());
         }
+        if (coll.gameObject.CompareTag("PlayerSkill1") && curHp > 0)
+        {
+            Destroy(coll.gameObject);
+            StartCoroutine(hurt(2));
+            StartCoroutine(knockBack());
+        }
+        else if (coll.gameObject.CompareTag("PlayerSkill1") && curHp <= 0)
+        {
+            Destroy(coll.gameObject);
+            box.enabled = false;
+            Instantiate(coin, gameObject.transform.position, Quaternion.identity);
+            //Instantiate(tree, gameObject.transform.position, Quaternion.Euler(0, 0, -90));
+            StartCoroutine(die());
+        }
+
     }
 
-    IEnumerator hurt()
+    IEnumerator hurt(int _damage)
     {
-        curHp -= 1;
+        curHp -= _damage;
         sprite.color = Color.red;
         isHurt = true;
 
@@ -158,6 +173,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator die()
     {
+        EnemySpawn.instance.enemyCount--;
         sprite.color = Color.red;
         rigid.velocity = new Vector2(0, 2f);
 
