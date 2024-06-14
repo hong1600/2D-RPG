@@ -12,6 +12,7 @@ TagManager:
   - Portal
   - PlayerSkill1
   - SecretRoom
+  - Boss
   layers:
   - Default
   - TransparentFX
@@ -26,8 +27,8 @@ TagManager:
   - Quest
   - Tree
   - Coin
-  - 
-  - 
+  - Object
+  - Boss
   - 
   - 
   - 

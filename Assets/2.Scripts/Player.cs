@@ -19,7 +19,8 @@ public class Player : MonoBehaviour
     [SerializeField] float maxMp;
     [SerializeField] float curMp;
     [SerializeField] float maxExp;
-    [SerializeField] float curExp;
+    public float curExp;
+    [SerializeField] int curLevel = 1;
     [SerializeField] float moveSpeed;
     [SerializeField] float jumpForce;
     [SerializeField] float dJumpForce;
@@ -33,6 +34,8 @@ public class Player : MonoBehaviour
     [SerializeField] float fallSpeed;
     [SerializeField] float walldistance;
     [SerializeField] float wallJump;
+    Vector2 dirVec;
+    GameObject scanObject;
 
     public bool isGround;
     bool isMove;
@@ -49,10 +52,20 @@ public class Player : MonoBehaviour
 
     public float playerScore = 0f;
 
-    public float Stat
-    {
-        get { return curHp; }
-    }
+    public float Maxhp
+    { get { return maxHp; } }
+    public float Curhp
+    { get { return curHp; } }
+    public float MaxMp 
+    { get {  return maxMp; } }
+    public float CurMp 
+    { get { return curMp; } }
+    public float Maxexp
+    { get { return maxExp; } }
+    public float Curexp
+    { get { return curExp; } set { curExp = value; } }
+    public int Level
+    { get { return curLevel; } }
 
     private void Awake()
     {
@@ -66,7 +79,6 @@ public class Player : MonoBehaviour
         }
 
         DontDestroyOnLoad(this.gameObject);
-
 
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -88,14 +100,9 @@ public class Player : MonoBehaviour
         checkWall();
         fallWall();
         jumpWall();
-        hpBar();
         score();
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, Vector2.right * isRight * 0.13f);
+        level();
+        scanObj();
     }
 
     private void move()
@@ -103,7 +110,8 @@ public class Player : MonoBehaviour
         float moveInput = Input.GetAxis("Horizontal");
         //Vector2 movePos = transform.position;
 
-        if (moveInput != 0 && isAttack == false && isDie == false)
+        if (moveInput != 0 && isAttack == false && isDie == false && isWallJump == false 
+            && isSkill1 == false && GameManager.instance.isAction == false)
         {
             isMove = true;
             anim.SetBool("isWalk", true);
@@ -123,12 +131,15 @@ public class Player : MonoBehaviour
 
         Vector2 movePos = rigid.velocity;
 
-        if(isMove == true && isWallJump == false && isSkill1 == false)
+        if(isMove == true)
         {
             movePos.x = moveInput * moveSpeed;
         }
 
         rigid.velocity = movePos;
+
+        if (moveInput > 0) { dirVec = Vector2.right; }
+        else if (moveInput < 0) { dirVec = Vector2.left; }
     }
 
     private void turn()
@@ -160,7 +171,7 @@ public class Player : MonoBehaviour
     private void checkGround()
     {
         if (Physics2D.Raycast(cap.bounds.center, Vector2.down,
-            cap.size.y * 0.8f, LayerMask.GetMask("Ground")))
+            cap.size.y * 0.8f, LayerMask.GetMask("Ground", "Wall")))
         {
             isGround = true;
             anim.SetBool("isJump", false);
@@ -275,6 +286,41 @@ public class Player : MonoBehaviour
         isMove = false;
     }
 
+    private void score()
+    {
+        scoreText.text = "X " + playerScore.ToString();
+    }
+
+    private void level()
+    {
+        if( maxExp <= curExp ) 
+        {
+            curLevel += 1;
+            curExp = 0;
+            maxExp += 10;
+        }
+    }
+
+    private void scanObj()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(cap.transform.position, dirVec, 1, LayerMask.GetMask("Object"));
+
+        if (hit.collider != null)
+        {
+            scanObject = hit.collider.gameObject;
+        }
+        else
+        {
+            scanObject = null;
+        }
+
+        if(Input.GetKeyDown (KeyCode.F) && scanObject != null) 
+        {
+            GameManager.instance.Action(scanObject);
+        }
+    }
+
+
     //private void dash()
     //{
     //    if(Input.GetKeyDown(KeyCode.LeftShift) && isdash == false) 
@@ -335,13 +381,5 @@ public class Player : MonoBehaviour
         yield return null;
     }
 
-    private void hpBar()
-    {
-        hpSlider.value = curHp / maxHp;
-    }
 
-    private void score()
-    {
-        scoreText.text = "X " + playerScore.ToString();
-    }
 }

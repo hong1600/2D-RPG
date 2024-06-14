@@ -5,6 +5,7 @@ using UnityEngine;
 public class mapLimit : MonoBehaviour
 {
     BoxCollider2D box;
+
     [SerializeField] GameObject player;
 
     private void Awake()

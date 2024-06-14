@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    Player player;
     Rigidbody2D rigid;
     BoxCollider2D box;
     SpriteRenderer sprite;
@@ -15,6 +16,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] float kDistance;
     [SerializeField] GameObject coin;
     [SerializeField] GameObject tree;
+    [SerializeField] float exp;
 
     int nextMove;
     bool tracking = false;
@@ -74,8 +76,6 @@ public class Enemy : MonoBehaviour
         {
             tracking = false;
         }
-
-
     }
 
     private void checkGround()
@@ -120,10 +120,10 @@ public class Enemy : MonoBehaviour
         }
         else if (coll.gameObject.CompareTag("PlayerSword") && curHp <= 0)
         {
+            StartCoroutine(die());
             box.enabled = false;
             Instantiate(coin, gameObject.transform.position, Quaternion.identity);
             //Instantiate(tree, gameObject.transform.position, Quaternion.Euler(0, 0, -90));
-            StartCoroutine(die());
         }
         if (coll.gameObject.CompareTag("PlayerSkill1") && curHp > 0)
         {
@@ -133,11 +133,11 @@ public class Enemy : MonoBehaviour
         }
         else if (coll.gameObject.CompareTag("PlayerSkill1") && curHp <= 0)
         {
+            StartCoroutine(die());
             Destroy(coll.gameObject);
             box.enabled = false;
             Instantiate(coin, gameObject.transform.position, Quaternion.identity);
             //Instantiate(tree, gameObject.transform.position, Quaternion.Euler(0, 0, -90));
-            StartCoroutine(die());
         }
 
     }
@@ -173,6 +173,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator die()
     {
+        Player.instance.curExp += 1;
         EnemySpawn.instance.enemyCount--;
         sprite.color = Color.red;
         rigid.velocity = new Vector2(0, 2f);

@@ -5,14 +5,40 @@ using UnityEngine.SceneManagement;
 
 public class BtnManager : MonoBehaviour
 {
-    public void startBtn()
+    public static BtnManager instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+        DontDestroyOnLoad(this.gameObject);
+    }
+
+
+    /// <summary>
+    /// ∏ﬁ¿Œæ¿
+    /// </summary>
+    public void GameStartBtn()
     {
         SceneManager.LoadScene(1);
     }
 
-    public void ExitBtn()
+    public void GameExitBtn()
     {
         
     }
+
+    /// <summary>
+    /// ∞‘¿”æ¿
+    /// </summary>
+    /// 
+
+
 
 }
