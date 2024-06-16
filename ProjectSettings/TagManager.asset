@@ -13,6 +13,8 @@ TagManager:
   - PlayerSkill1
   - SecretRoom
   - Boss
+  - BossAttack1
+  - BossAttack2
   layers:
   - Default
   - TransparentFX

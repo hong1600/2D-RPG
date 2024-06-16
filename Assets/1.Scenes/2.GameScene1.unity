@@ -5195,7 +5195,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &109193530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5209,7 +5209,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attack1Box: {fileID: 1527159080}
-  curHp: 0
+  coin: {fileID: 2211482463824898107, guid: 2ffe174c3a30a784cbafc98dc70f09fe, type: 3}
+  skill1: {fileID: 7551799902991543225, guid: 45bd11c8e4a9e824da7b391e699f2717, type: 3}
+  skill1Pos: {fileID: 1142724692}
+  player: {fileID: 1279264087}
+  curHp: 3
+  coolTime: 3
 --- !u!212 &109193531
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8222,6 +8227,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1142724691
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1142724692}
+  m_Layer: 6
+  m_Name: BossSkill1Pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1142724692
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142724691}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.39, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1279264092}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1159011793
 GameObject:
   m_ObjectHideFlags: 0
@@ -8260,7 +8296,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 160}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1180, y: 380}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1159011795
@@ -9669,6 +9705,7 @@ Transform:
   m_Children:
   - {fileID: 543042472}
   - {fileID: 427462028}
+  - {fileID: 1142724692}
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10862,7 +10899,7 @@ GameObject:
   - component: {fileID: 1527159081}
   m_Layer: 14
   m_Name: Attack1Box
-  m_TagString: Untagged
+  m_TagString: BossAttack1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10896,7 +10933,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.21061912, y: -0.17518815}
@@ -11856,7 +11893,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 133}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 120}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1751328279

@@ -206,9 +206,10 @@ public class Player : MonoBehaviour
             StartCoroutine(sword());
         }
         else if (Input.GetKeyDown(KeyCode.A) && isSkill1 == false &&
-            isGround == true && isAttack == false && isDie == false)
+            isGround == true && isAttack == false && isDie == false && curMp >= 5f)
         {
             StartCoroutine(skill1());
+            curMp -= 5f;
         }
     }
 
@@ -329,30 +330,54 @@ public class Player : MonoBehaviour
     //    }
     //}
 
+    private void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (coll.gameObject.CompareTag("BossAttack1") && curHp > 0 && isHurt == false)
+        {
+            StartCoroutine(hurt(10));
+            //StartCoroutine(knockBack());
+        }
+        else if (coll.gameObject.CompareTag("BossAttack1") && curHp <= 0)
+        {
+            StartCoroutine(die());
+        }
+
+        if (coll.gameObject.CompareTag("BossAttack2") && curHp > 0 && isHurt == false)
+        {
+            StartCoroutine(hurt(20));
+            //StartCoroutine(knockBack());
+        }
+        else if (coll.gameObject.CompareTag("BossAttack2") && curHp <= 0)
+        {
+            StartCoroutine(die());
+        }
+
+        if (coll.gameObject.CompareTag("Coin"))
+        {
+            playerScore += 1f;
+            Destroy(coll.gameObject);
+        }
+
+    }
+
 
     private void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.collider.CompareTag("Enemy") && curHp > 0 && isHurt == false)
         {
-            StartCoroutine(hurt());
+            StartCoroutine(hurt(5));
             //StartCoroutine(knockBack());
         }
         else if (coll.collider.CompareTag("Enemy") && curHp <= 0)
         {
             StartCoroutine(die());
         }
-
-        if (coll.collider.CompareTag("Coin"))
-        {
-            playerScore += 1f;
-            Destroy(coll.gameObject);
-        }
     }
 
 
-    IEnumerator hurt()
+    IEnumerator hurt(int damage)
     {
-        curHp -= 10f;
+        curHp -= damage;
         isHurt = true;
         anim.SetTrigger("isHurt");
 
