@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    [SerializeField] GameObject player;
+    public GameObject player;
 
     [SerializeField] GameObject talkPanel;
     [SerializeField] GameObject scanObject;
