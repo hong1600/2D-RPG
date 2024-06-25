@@ -12,9 +12,13 @@ TagManager:
   - Portal
   - PlayerSkill1
   - SecretRoom
+  - Enemy2
+  - Enemy2Attack1
+  - Enemy2Attack2
   - Boss
   - BossAttack1
   - BossAttack2
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -31,7 +35,7 @@ TagManager:
   - Coin
   - Object
   - Boss
-  - 
+  - Enemy2
   - 
   - 
   - 

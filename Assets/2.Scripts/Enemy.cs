@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public enum Type { A,B,C }
     Player player;
     Rigidbody2D rigid;
     BoxCollider2D box;
     SpriteRenderer sprite;
+    Animator anim;
 
     [SerializeField] float speed;
     [SerializeField] float curHp;
@@ -29,6 +31,7 @@ public class Enemy : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         box = GetComponent<BoxCollider2D>();
         sprite = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
 
         Invoke("think", 2);
     }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -14,6 +13,7 @@ public class Player : MonoBehaviour
     CapsuleCollider2D cap;
     SpriteRenderer sprite;
 
+    [SerializeField] GameObject btnManager;
     [SerializeField] float maxHp;
     [SerializeField] float curHp;
     [SerializeField] float maxMp;
@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     [SerializeField] float maxExp;
     public float curExp;
     [SerializeField] int curLevel = 1;
+    public int curSkillPoint = 0;
     [SerializeField] float moveSpeed;
     [SerializeField] float jumpForce;
     [SerializeField] float dJumpForce;
@@ -34,6 +35,7 @@ public class Player : MonoBehaviour
     [SerializeField] float fallSpeed;
     [SerializeField] float walldistance;
     [SerializeField] float wallJump;
+    [SerializeField] GameObject skillPanel;
     Vector2 dirVec;
     GameObject scanObject;
 
@@ -48,6 +50,7 @@ public class Player : MonoBehaviour
     bool isWall;
     bool isWallJump;
     float isRight;
+    bool skillPanelOn;
     //bool isdash = false;
 
     public float playerScore = 0f;
@@ -66,6 +69,9 @@ public class Player : MonoBehaviour
     { get { return curExp; } set { curExp = value; } }
     public int Level
     { get { return curLevel; } }
+    public int SkillPoint
+    { get { return curSkillPoint; } }
+
 
     private void Awake()
     {
@@ -100,7 +106,6 @@ public class Player : MonoBehaviour
         checkWall();
         fallWall();
         jumpWall();
-        score();
         level();
         scanObj();
     }
@@ -144,13 +149,15 @@ public class Player : MonoBehaviour
 
     private void turn()
     {
-        if (Input.GetAxis("Horizontal") < 0 && isDie == false && isAttack == false)
+        if (Input.GetAxis("Horizontal") < 0 && isDie == false 
+            && isAttack == false && isSkill1 == false)
         {
             gameObject.transform.transform.localScale = new Vector3(-1.5f, 1.5f, 1);
             //sprite.flipX = true;
             isRight = -1f;
         }
-        else if (Input.GetAxis("Horizontal") > 0 && isDie == false && isAttack == false)
+        else if (Input.GetAxis("Horizontal") > 0 && isDie == false 
+            && isAttack == false && isSkill1 == false)
         {
             gameObject.transform.transform.localScale = new Vector3(1.5f, 1.5f, 1);
             //sprite.flipX = false;
@@ -170,8 +177,10 @@ public class Player : MonoBehaviour
 
     private void checkGround()
     {
-        if (Physics2D.Raycast(cap.bounds.center, Vector2.down,
-            cap.size.y * 0.8f, LayerMask.GetMask("Ground", "Wall")))
+        if (Physics2D.Raycast(cap.bounds.min, Vector2.down,
+            cap.size.y * 0.8f, LayerMask.GetMask("Ground", "Wall")) 
+            || Physics2D.Raycast(cap.bounds.max, Vector2.down,
+            cap.size.y * 1.6f, LayerMask.GetMask("Ground", "Wall")))
         {
             isGround = true;
             anim.SetBool("isJump", false);
@@ -181,6 +190,7 @@ public class Player : MonoBehaviour
             isGround = false;
             anim.SetBool("isJump", true);
         }
+
     }
 
     private void jump()
@@ -206,7 +216,7 @@ public class Player : MonoBehaviour
             StartCoroutine(sword());
         }
         else if (Input.GetKeyDown(KeyCode.A) && isSkill1 == false &&
-            isGround == true && isAttack == false && isDie == false && curMp >= 5f)
+            isGround == true && isAttack == false && isDie == false && curMp >= 5f)    
         {
             StartCoroutine(skill1());
             curMp -= 5f;
@@ -218,6 +228,7 @@ public class Player : MonoBehaviour
         anim.SetBool("isSword", true);
         isAttack = true;
         isMove = false;
+        rigid.velocity = new Vector2(0, rigid.velocity.y);
 
         yield return new WaitForSeconds(0.3f);
 
@@ -287,18 +298,14 @@ public class Player : MonoBehaviour
         isMove = false;
     }
 
-    private void score()
-    {
-        scoreText.text = "X " + playerScore.ToString();
-    }
-
     private void level()
     {
         if( maxExp <= curExp ) 
         {
             curLevel += 1;
             curExp = 0;
-            maxExp += 10;
+            maxExp += 3;
+            curSkillPoint += 1;
         }
     }
 
@@ -321,7 +328,6 @@ public class Player : MonoBehaviour
         }
     }
 
-
     //private void dash()
     //{
     //    if(Input.GetKeyDown(KeyCode.LeftShift) && isdash == false) 
@@ -332,22 +338,22 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D coll)
     {
-        if (coll.gameObject.CompareTag("BossAttack1") && curHp > 0 && isHurt == false)
+        if (coll.gameObject.CompareTag("Enemy2Attack1") && curHp > 0 && isHurt == false)
         {
             StartCoroutine(hurt(10));
-            //StartCoroutine(knockBack());
+            StartCoroutine(knockBack(coll.gameObject));
         }
-        else if (coll.gameObject.CompareTag("BossAttack1") && curHp <= 0)
+        else if (coll.gameObject.CompareTag("Enemy2Attack1") && curHp <= 0)
         {
             StartCoroutine(die());
         }
 
-        if (coll.gameObject.CompareTag("BossAttack2") && curHp > 0 && isHurt == false)
+        if (coll.gameObject.CompareTag("Enemy2Attack2") && curHp > 0 && isHurt == false)
         {
             StartCoroutine(hurt(20));
-            //StartCoroutine(knockBack());
+            StartCoroutine(knockBack(coll.gameObject));
         }
-        else if (coll.gameObject.CompareTag("BossAttack2") && curHp <= 0)
+        else if (coll.gameObject.CompareTag("Enemy2Attack2") && curHp <= 0)
         {
             StartCoroutine(die());
         }
@@ -366,12 +372,23 @@ public class Player : MonoBehaviour
         if (coll.collider.CompareTag("Enemy") && curHp > 0 && isHurt == false)
         {
             StartCoroutine(hurt(5));
-            //StartCoroutine(knockBack());
+            StartCoroutine(knockBack(coll.gameObject));
         }
         else if (coll.collider.CompareTag("Enemy") && curHp <= 0)
         {
             StartCoroutine(die());
         }
+
+        if (coll.collider.CompareTag("Boss") && curHp > 0 && isHurt == false)
+        {
+            StartCoroutine(hurt(10));
+            StartCoroutine(knockBack(coll.gameObject));
+        }
+        else if (coll.collider.CompareTag("Boss") && curHp <= 0)
+        {
+            StartCoroutine(die());
+        }
+
     }
 
 
@@ -380,21 +397,23 @@ public class Player : MonoBehaviour
         curHp -= damage;
         isHurt = true;
         anim.SetTrigger("isHurt");
+        isAttack = true;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
 
         isHurt = false;
+        isAttack = false;
     }
 
-    IEnumerator knockBack()
+    IEnumerator knockBack(GameObject obj)
     {
-        if (sprite.flipX == true)
+        if (obj.transform.position.x > gameObject.transform.position.x)
         {
-            gameObject.transform.Translate(Vector2.right * knockBackPower * Time.deltaTime);
+            rigid.velocity = new Vector2 (-2f, 1f);
         }
-        else
+        else if (obj.transform.position.x < gameObject.transform.position.x)
         {
-            gameObject.transform.Translate(Vector2.left * knockBackPower * Time.deltaTime);
+            rigid.velocity = new Vector2(2f, 1f);
         }
         yield return null;
     }

@@ -14,11 +14,20 @@ public class UIManager : MonoBehaviour
     [SerializeField] Slider mpBar;
     [SerializeField] Slider expBar;
     [SerializeField] TextMeshProUGUI level;
+    [SerializeField] TextMeshProUGUI skillPoint;
 
     [SerializeField] GameObject statPanel;
     [SerializeField] GameObject skillA;
+    [SerializeField] GameObject skillPanel;
 
+    [SerializeField] TextMeshProUGUI skill1Text;
+
+    [SerializeField] TextMeshProUGUI curHpText;
+    [SerializeField] TextMeshProUGUI curMpText;
+    [SerializeField] TextMeshProUGUI curExpText;
+ 
     bool staton;
+    bool SkillA;
 
     private void Awake()
     {
@@ -46,6 +55,11 @@ public class UIManager : MonoBehaviour
         mpBar.value = player.CurMp / player.MaxMp;
         expBar.value = player.Curexp / player.Maxexp;
         level.text = player.Level.ToString();
+        skillPoint.text = player.SkillPoint.ToString();
+
+        curHpText.text = $"{player.Curhp} / {player.Maxhp}";
+        curMpText.text = $"{player.CurMp} / {player.MaxMp}";
+        curExpText.text = $"{player.Curexp} / {player.Maxexp}";
     }
 
     private void statPanelOn()

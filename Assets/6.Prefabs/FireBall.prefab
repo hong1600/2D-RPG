@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2597668510015258228}
   - component: {fileID: 8925370630213849911}
+  - component: {fileID: -5862603864238366187}
   - component: {fileID: 5976191992075828306}
   - component: {fileID: 7929579118924702997}
-  - component: {fileID: -5862603864238366187}
   - component: {fileID: -9001740146855100422}
   m_Layer: 0
   m_Name: FireBall
@@ -88,6 +88,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-5862603864238366187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2258061844223909663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c27a456abc9004d9957a5eb9f23971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireSpeed: 3
+  explosion: {fileID: 6826058495536609829, guid: 7de7288971bda994dadc7c93aa9f1d1f, type: 3}
 --- !u!58 &5976191992075828306
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -144,19 +158,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-5862603864238366187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2258061844223909663}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51c27a456abc9004d9957a5eb9f23971, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireSpeed: 3
 --- !u!50 &-9001740146855100422
 Rigidbody2D:
   serializedVersion: 4

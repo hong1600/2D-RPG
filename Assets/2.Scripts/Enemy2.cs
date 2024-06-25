@@ -13,18 +13,12 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] GameObject coin;
     [SerializeField] GameObject skill1;
 
-    GameObject player = GameManager.instance.player;
-
     [SerializeField] float curHp;
     float maxHp;
     [SerializeField] float coolTime;
-    [SerializeField] float speed;
 
     bool isDie;
     bool isHurt;
-    bool tracking;
-    bool nTracking;
-    int nextMove;
 
     Vector2 dirVec;
 
@@ -42,43 +36,12 @@ public class Enemy2 : MonoBehaviour
     void Update()
     {
         think();
-        move();
-        checkPlayer();
         cooltime();
     }
 
     private void think()
     {
-        nextMove = Random.Range(-1, 2);
-
         Invoke("think", 2);
-    }
-
-
-    private void move()
-    {
-        if (tracking == false && isHurt == false)
-        {
-            rigid.velocity = new Vector2(nextMove * speed, rigid.velocity.y);
-        }
-        else if (tracking == true && isHurt == false)
-        {
-            rigid.velocity =
-                new Vector2(GameManager.instance.playerPos().normalized.x * speed, rigid.velocity.y);
-        }
-    }
-
-    private void checkPlayer()
-    {
-        if (Physics2D.Raycast(box.bounds.center, Vector2.left, box.size.x * 4,
-            LayerMask.GetMask("Player")) && nTracking == false)
-        {
-            tracking = true;
-        }
-        else
-        {
-            tracking = false;
-        }
     }
 
     private void cooltime()
@@ -94,8 +57,7 @@ public class Enemy2 : MonoBehaviour
 
     private void bossAttack()
     {
-        //int rand = Random.Range(0, 2);
-        int rand = 0;
+        int rand = Random.Range(0, 2);
 
         if (rand == 0)
         {
@@ -142,7 +104,6 @@ public class Enemy2 : MonoBehaviour
         {
             StartCoroutine(die());
             Instantiate(coin, gameObject.transform.position, Quaternion.identity);
-            //Instantiate(tree, gameObject.transform.position, Quaternion.Euler(0, 0, -90));
         }
         if (coll.gameObject.CompareTag("PlayerSkill1") && curHp > 0)
         {
@@ -155,7 +116,6 @@ public class Enemy2 : MonoBehaviour
             StartCoroutine(die());
             Destroy(coll.gameObject);
             Instantiate(coin, gameObject.transform.position, Quaternion.identity);
-            //Instantiate(tree, gameObject.transform.position, Quaternion.Euler(0, 0, -90));
         }
 
     }

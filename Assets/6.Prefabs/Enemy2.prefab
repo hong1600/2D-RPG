@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 2039978965390041875}
   - component: {fileID: 2799928695000313609}
   - component: {fileID: 935524284554854776}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Enemy2
-  m_TagString: Boss
+  m_TagString: Enemy2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,11 +104,8 @@ MonoBehaviour:
   attack1Box: {fileID: 8322275829831396156}
   coin: {fileID: 2211482463824898107, guid: 2ffe174c3a30a784cbafc98dc70f09fe, type: 3}
   skill1: {fileID: 7551799902991543225, guid: 45bd11c8e4a9e824da7b391e699f2717, type: 3}
-  skill1Pos: {fileID: 0}
-  player: {fileID: 0}
   curHp: 3
   coolTime: 3
-  speed: 1
 --- !u!50 &2039978965390041875
 Rigidbody2D:
   serializedVersion: 4
@@ -212,9 +209,9 @@ GameObject:
   m_Component:
   - component: {fileID: 839746955987600065}
   - component: {fileID: 1935871982697118224}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Attack1Box
-  m_TagString: BossAttack1
+  m_TagString: Enemy2Attack1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
