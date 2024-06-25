@@ -31,30 +31,32 @@ public class PlayerSkill1 : MonoBehaviour
         Destroy(this.gameObject, 1f);
     }
 
-    private void Update()
-    {
-        Explosion();
-    }
-
-    private void Explosion()
-    {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, 
-            Vector2.right, 0.1f, LayerMask.GetMask("Wall"));
-
-        Instantiate(explosion, hit.point, Quaternion.identity);
-    }
-
     private void OnTriggerEnter2D(Collider2D coll)
     {
         if (coll.gameObject.CompareTag("Ground"))
         {
+            Instantiate(explosion, gameObject.transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
         else if (coll.gameObject.CompareTag("Wall"))
         {
+            Instantiate(explosion, gameObject.transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
-
+        else if (coll.gameObject.CompareTag("Enemy"))
+        {
+            Instantiate(explosion, coll.transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+        else if (coll.gameObject.CompareTag("Enemy2"))
+        {
+            Instantiate(explosion, coll.transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+        else if (coll.gameObject.CompareTag("Boss"))
+        {
+            Instantiate(explosion, coll.transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
     }
-
 }

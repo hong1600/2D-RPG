@@ -19,6 +19,8 @@ TagManager:
   - BossAttack1
   - BossAttack2
   - Wall
+  - Lever
+  - Lander
   layers:
   - Default
   - TransparentFX

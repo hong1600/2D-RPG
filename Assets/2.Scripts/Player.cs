@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
     bool isWallJump;
     float isRight;
     bool skillPanelOn;
-    //bool isdash = false;
+    bool isLander;
 
     public float playerScore = 0f;
 
@@ -108,6 +108,7 @@ public class Player : MonoBehaviour
         jumpWall();
         level();
         scanObj();
+        lander();
     }
 
     private void move()
@@ -328,14 +329,21 @@ public class Player : MonoBehaviour
         }
     }
 
-    //private void dash()
-    //{
-    //    if(Input.GetKeyDown(KeyCode.LeftShift) && isdash == false) 
-    //    {
-    //        rigid.velocity = new Vector2(dashSpeed, 0);
-    //    }
-    //}
+    private void lander()
+    {
+        float moveInput = Input.GetAxis("Vertical");
 
+        if (isLander == true && moveInput != 0)
+        {
+            anim.SetBool("isLander", true);
+            Debug.Log("오름");
+        }
+        else
+        {
+            anim.SetBool("isLander", false);
+        }
+
+    }
     private void OnTriggerEnter2D(Collider2D coll)
     {
         if (coll.gameObject.CompareTag("Enemy2Attack1") && curHp > 0 && isHurt == false)
@@ -362,6 +370,12 @@ public class Player : MonoBehaviour
         {
             playerScore += 1f;
             Destroy(coll.gameObject);
+        }
+
+        if (coll.gameObject.CompareTag("Lander"))
+        {
+            isLander = true;
+            Debug.Log("사다리");
         }
 
     }
