@@ -16,15 +16,6 @@ public class GameBtnManager : MonoBehaviour
     [SerializeField] GameObject skill1ImgOn;
     [SerializeField] GameObject menuPanel;
 
-    public bool skill1on = false;
-    public bool skill2on = false;
-    public bool skill3on = false;
-
-    private void Awake()
-    {
-
-    }
-
     public void skill1Btn()
     {
         if (Player.instance.SkillPoint > 0)

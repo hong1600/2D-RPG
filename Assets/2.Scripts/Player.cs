@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] float jumpForce;
     [SerializeField] float dJumpForce;
-    [SerializeField] float dashSpeed;
+    [SerializeField] float landerSpeed;
     [SerializeField] float knockBackPower;
     [SerializeField] GameObject swordBox;
     [SerializeField] GameObject fireBall;
@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject skillPanel;
     Vector2 dirVec;
     GameObject scanObject;
+
 
     public bool isGround;
     bool isMove;
@@ -52,6 +53,7 @@ public class Player : MonoBehaviour
     float isRight;
     bool skillPanelOn;
     bool isLander;
+    bool landering;
 
     public float playerScore = 0f;
 
@@ -117,7 +119,7 @@ public class Player : MonoBehaviour
         //Vector2 movePos = transform.position;
 
         if (moveInput != 0 && isAttack == false && isDie == false && isWallJump == false 
-            && isSkill1 == false && GameManager.instance.isAction == false)
+            && isSkill1 == false && GameManager.instance.isAction == false && landering == false)
         {
             isMove = true;
             anim.SetBool("isWalk", true);
@@ -150,15 +152,15 @@ public class Player : MonoBehaviour
 
     private void turn()
     {
-        if (Input.GetAxis("Horizontal") < 0 && isDie == false 
-            && isAttack == false && isSkill1 == false)
+        if (Input.GetAxis("Horizontal") < 0 && isDie == false
+            && isAttack == false && isSkill1 == false && landering == false)
         {
             gameObject.transform.transform.localScale = new Vector3(-1.5f, 1.5f, 1);
             //sprite.flipX = true;
             isRight = -1f;
         }
         else if (Input.GetAxis("Horizontal") > 0 && isDie == false 
-            && isAttack == false && isSkill1 == false)
+            && isAttack == false && isSkill1 == false && landering == false)
         {
             gameObject.transform.transform.localScale = new Vector3(1.5f, 1.5f, 1);
             //sprite.flipX = false;
@@ -331,18 +333,19 @@ public class Player : MonoBehaviour
 
     private void lander()
     {
-        float moveInput = Input.GetAxis("Vertical");
+        float moveInput = Input.GetAxisRaw("Vertical");
 
         if (isLander == true && moveInput != 0)
         {
             anim.SetBool("isLander", true);
-            Debug.Log("오름");
+            rigid.velocity = new Vector2 (0, moveInput * landerSpeed);
+            landering = true;
         }
         else
         {
             anim.SetBool("isLander", false);
+            landering = false;
         }
-
     }
     private void OnTriggerEnter2D(Collider2D coll)
     {
@@ -375,9 +378,15 @@ public class Player : MonoBehaviour
         if (coll.gameObject.CompareTag("Lander"))
         {
             isLander = true;
-            Debug.Log("사다리");
         }
+    }
 
+    private void OnTriggerExit2D(Collider2D coll)
+    {
+        if (coll.gameObject.CompareTag("Lander"))
+        {
+            isLander = false;
+        }
     }
 
 
