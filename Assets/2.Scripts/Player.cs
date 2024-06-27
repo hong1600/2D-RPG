@@ -417,7 +417,14 @@ public class Player : MonoBehaviour
 
     IEnumerator hurt(int damage)
     {
-        curHp -= damage;
+        if (curHp > damage)
+        {
+            curHp -= damage;
+        }
+        else
+        {
+            curHp = 0;
+        }
         isHurt = true;
         anim.SetTrigger("isHurt");
         isAttack = true;

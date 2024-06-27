@@ -13,12 +13,18 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] GameObject coin;
     [SerializeField] GameObject skill1;
 
+    [SerializeField] Transform skill1Pos1;
+    [SerializeField] Transform skill1Pos2;
+    [SerializeField] Transform skill1Pos3;
+
     [SerializeField] float curHp;
     float maxHp;
     [SerializeField] float coolTime;
+    [SerializeField] float distance;
 
     bool isDie;
     bool isHurt;
+    bool isAttack;
 
     Vector2 dirVec;
 
@@ -37,6 +43,7 @@ public class Enemy2 : MonoBehaviour
     {
         think();
         cooltime();
+        turn();
     }
 
     private void think()
@@ -46,7 +53,7 @@ public class Enemy2 : MonoBehaviour
 
     private void cooltime()
     {
-        if (coolTime <= 0)
+        if (coolTime <= 0 && isAttack == true)
         {
             bossAttack();
             coolTime = 3f;
@@ -55,18 +62,39 @@ public class Enemy2 : MonoBehaviour
         coolTime -= Time.deltaTime;
     }
 
+    private void turn() 
+    {
+        if (GameManager.instance.playerPos().x < transform.position.x)
+        {
+            transform.localScale = new Vector3(1.5f, 1.5f, 1);
+            dirVec = Vector2.left;
+        }
+        else
+        {
+            transform.localScale = new Vector3(-1.5f, 1.5f, 1);
+            dirVec = Vector2.right;
+        }
+
+        if (Physics2D.Raycast(box.bounds.center, dirVec, distance, LayerMask.GetMask("Player")))
+        {
+            isAttack = true;
+        }
+        else
+            isAttack = false;
+    }
+
     private void bossAttack()
     {
         int rand = Random.Range(0, 2);
 
-        if (rand == 0)
-        {
-            StartCoroutine(attack1());
-        }
-        else if(rand == 1) 
-        {
-            StartCoroutine(attack2());
-        }
+            if (rand == 0)
+            {
+                StartCoroutine(attack1());
+            }
+            else if (rand == 1)
+            {
+                StartCoroutine(attack2());
+            }
     }
 
     IEnumerator attack1()
@@ -89,8 +117,16 @@ public class Enemy2 : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        //Instantiate(skill1, skill1Pos.position, Quaternion.identity);
+        Instantiate(skill1, skill1Pos1.position, Quaternion.identity);
         anim.SetBool("Attack2", false);
+
+        yield return new WaitForSeconds(0.5f);
+
+        Instantiate(skill1, skill1Pos2.position, Quaternion.identity);
+
+        yield return new WaitForSeconds(0.5f);
+
+        Instantiate(skill1, skill1Pos3.position, Quaternion.identity);
     }
 
     private void OnTriggerEnter2D(Collider2D coll)

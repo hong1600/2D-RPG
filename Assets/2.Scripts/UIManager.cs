@@ -57,6 +57,7 @@ public class UIManager : MonoBehaviour
         level.text = player.Level.ToString();
         skillPoint.text = player.SkillPoint.ToString();
 
+        
         curHpText.text = $"{player.Curhp} / {player.Maxhp}";
         curMpText.text = $"{player.CurMp} / {player.MaxMp}";
         curExpText.text = $"{player.Curexp} / {player.Maxexp}";

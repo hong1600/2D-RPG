@@ -10,16 +10,9 @@ public class MainBtnManager : MonoBehaviour
 {
     [SerializeField] GameObject realExitPanel;
 
-    private void Awake()
-    {
-
-    }
-    /// <summary>
-    /// ¸ÞÀÎ¾À
-    /// </summary>
     public void GameStartBtn()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(3);
     }
 
     public void GameExitBtn()

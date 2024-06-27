@@ -67,12 +67,12 @@ public class Boss : MonoBehaviour
 
     private void checkPlayer()
     {
-        if (GameManager.instance.player.transform.position.x < gameObject.transform.position.x)
+        if (GameManager.instance.player.transform.position.x < transform.position.x)
         {
             dirVec = Vector2.left;
             moveDir = -1f;
         }
-        else if (GameManager.instance.player.transform.position.x > gameObject.transform.position.x)
+        else if (GameManager.instance.player.transform.position.x > transform.position.x)
         {
             dirVec = Vector2.right;
             moveDir = 1f;
