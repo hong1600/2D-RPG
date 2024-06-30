@@ -25,6 +25,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI curHpText;
     [SerializeField] TextMeshProUGUI curMpText;
     [SerializeField] TextMeshProUGUI curExpText;
+    [SerializeField] TextMeshProUGUI curCoin;
+    [SerializeField] TextMeshProUGUI Hpup;
+    [SerializeField] TextMeshProUGUI Mpup;
  
     bool staton;
     bool SkillA;
@@ -56,6 +59,9 @@ public class UIManager : MonoBehaviour
         expBar.value = player.Curexp / player.Maxexp;
         level.text = player.Level.ToString();
         skillPoint.text = player.SkillPoint.ToString();
+        curCoin.text = player.playerCoin.ToString();
+        Hpup.text = player.hpup.ToString();
+        Mpup.text = player.mpup.ToString();
 
         
         curHpText.text = $"{player.Curhp} / {player.Maxhp}";

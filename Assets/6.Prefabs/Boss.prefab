@@ -135,6 +135,8 @@ MonoBehaviour:
   distance: 3
   tracking: 0
   speed: 0.5
+  curHp: 10
+  kDistance: 2
   bossSkill1: {fileID: 8062762455518641284, guid: 86baa43f0d8728a41861fdf1e5d1c2ec, type: 3}
   bossSkill1Trs: {fileID: 8117379086166024888}
 --- !u!95 &1461093333061204032

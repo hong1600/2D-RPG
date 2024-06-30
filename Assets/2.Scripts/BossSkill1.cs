@@ -6,6 +6,7 @@ public class BossSkill1 : MonoBehaviour
 {
     Rigidbody2D rigid;
     BoxCollider2D box;
+
     [SerializeField] float speed;
 
     private void Awake()
@@ -13,6 +14,23 @@ public class BossSkill1 : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         box = GetComponent<BoxCollider2D>();
 
-        rigid.velocity = new Vector2(speed, rigid.velocity.y);
+        if (transform.position.x < GameManager.instance.transform.position.x)
+        {
+            rigid.velocity = new Vector2(-speed, rigid.velocity.y);
+
+        }
+        else
+        {
+            rigid.velocity = new Vector2(speed, rigid.velocity.y);
+        }
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

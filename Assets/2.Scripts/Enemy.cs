@@ -19,7 +19,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] GameObject coin;
     [SerializeField] GameObject tree;
     [SerializeField] float exp;
-
     int nextMove;
     bool tracking = false;
     bool nTracking;

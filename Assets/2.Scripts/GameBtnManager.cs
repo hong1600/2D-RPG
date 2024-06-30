@@ -9,6 +9,8 @@ using UnityEngine.UI;
 public class GameBtnManager : MonoBehaviour
 {
 
+    public static GameBtnManager Instance;
+
     [SerializeField] Image skill1Img;
 
     [SerializeField] GameObject skill1Panel;
@@ -16,6 +18,19 @@ public class GameBtnManager : MonoBehaviour
     [SerializeField] GameObject skill1ImgOn;
     [SerializeField] GameObject menuPanel;
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+
+        DontDestroyOnLoad(this.gameObject);
+    }
     public void skill1Btn()
     {
         if (Player.instance.SkillPoint > 0)
@@ -53,4 +68,21 @@ public class GameBtnManager : MonoBehaviour
         realExitPanel.SetActive(false);
     }
 
+    public void hpBtn()
+    {
+        if(Player.instance.coin >= 5) 
+        {
+            Player.instance.coin -= 5;
+            Player.instance.hpup += 1;
+        }
+    }
+
+    public void mpBtn()
+    {
+        if (Player.instance.coin >= 5)
+        {
+            Player.instance.coin -= 5;
+            Player.instance.mpup += 1;
+        }
+    }
 }

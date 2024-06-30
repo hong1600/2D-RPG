@@ -29,15 +29,17 @@ public class Player : MonoBehaviour
     [SerializeField] float knockBackPower;
     [SerializeField] GameObject swordBox;
     [SerializeField] GameObject fireBall;
+    GameObject scanObject;
     [SerializeField] Transform fireBallTrs;
     [SerializeField] Slider hpSlider;
-    [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] float fallSpeed;
     [SerializeField] float walldistance;
     [SerializeField] float wallJump;
-    [SerializeField] GameObject skillPanel;
+    [SerializeField] GameObject inventoryPanel;
     Vector2 dirVec;
-    GameObject scanObject;
+    public int coin;
+    public int hpup = 0;
+    public int mpup = 0;
 
 
     public bool isGround;
@@ -54,16 +56,15 @@ public class Player : MonoBehaviour
     bool skillPanelOn;
     bool isLander;
     bool landering;
-
-    public float playerScore = 0f;
+    bool inventoryon = false;
 
     public float Maxhp
     { get { return maxHp; } }
     public float Curhp
     { get { return curHp; } }
-    public float MaxMp 
-    { get {  return maxMp; } }
-    public float CurMp 
+    public float MaxMp
+    { get { return maxMp; } }
+    public float CurMp
     { get { return curMp; } }
     public float Maxexp
     { get { return maxExp; } }
@@ -73,6 +74,8 @@ public class Player : MonoBehaviour
     { get { return curLevel; } }
     public int SkillPoint
     { get { return curSkillPoint; } }
+    public int playerCoin
+    { get { return coin; } }
 
 
     private void Awake()
@@ -111,6 +114,7 @@ public class Player : MonoBehaviour
         level();
         scanObj();
         lander();
+        fuction();
     }
 
     private void move()
@@ -331,6 +335,59 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void fuction()
+    {
+        if(Input.GetKeyDown(KeyCode.I) && inventoryon == false) 
+        {
+            inventoryPanel.SetActive(true);
+            inventoryon = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.I) && inventoryon == true)
+        {
+            inventoryPanel.SetActive(false);
+            inventoryon = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Delete) && hpup <= 1)
+        {
+            if (curHp >= 50)
+            {
+                curHp = maxHp;
+            }
+            else
+            {
+                curHp += 50f;
+            }
+
+            hpup -= 1;
+
+            if (hpup <= 0)
+            {
+                hpup = 0;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.End) && mpup <= 1)
+        {
+            if (curMp >= 50)
+            {
+                curMp = maxMp;
+            }
+            else
+            {
+                curMp += 50f;
+            }
+
+            mpup -= 1;
+
+            if (mpup <= 0)
+            {
+                mpup = 0;
+            }
+        }
+
+    }
+
     private void lander()
     {
         float moveInput = Input.GetAxisRaw("Vertical");
@@ -369,23 +426,29 @@ public class Player : MonoBehaviour
             StartCoroutine(die());
         }
 
-        if (coll.gameObject.CompareTag("Coin"))
-        {
-            playerScore += 1f;
-            Destroy(coll.gameObject);
-        }
-
         if (coll.gameObject.CompareTag("Lander"))
         {
             isLander = true;
         }
-    }
 
-    private void OnTriggerExit2D(Collider2D coll)
-    {
-        if (coll.gameObject.CompareTag("Lander"))
+        if (coll.gameObject.CompareTag("BossAttack1"))
         {
-            isLander = false;
+            StartCoroutine(hurt(10));
+        }
+
+        else if (coll.gameObject.CompareTag("BossAttack1") && curHp <= 0)
+        {
+            StartCoroutine(die());
+        }
+
+        if (coll.gameObject.CompareTag("BossAttack1"))
+        {
+            StartCoroutine(hurt(10));
+        }
+
+        else if (coll.gameObject.CompareTag("BossAttack1") && curHp <= 0)
+        {
+            StartCoroutine(die());
         }
     }
 
@@ -412,6 +475,11 @@ public class Player : MonoBehaviour
             StartCoroutine(die());
         }
 
+        if (coll.collider.CompareTag("Coin"))
+        {
+            coin += 10;
+            Destroy(coll.gameObject);
+        }
     }
 
 

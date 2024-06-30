@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Boss : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class Boss : MonoBehaviour
     [SerializeField] float distance;
     [SerializeField] bool tracking;
     [SerializeField] float speed;
+    [SerializeField] float curHp;
+    [SerializeField] float kDistance;
+    bool isHurt;
     float moveDir;
     int nextMove;
     bool nTracking;
@@ -159,10 +163,73 @@ public class Boss : MonoBehaviour
         }
         anim.SetBool("isAttack1", false);
     }
+
     IEnumerator attack2()
     {
 
         yield return null;
     }
 
+    private void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (coll.gameObject.CompareTag("PlayerSword") && curHp > 0)
+        {
+            StartCoroutine(hurt(1));
+            StartCoroutine(knockBack());
+        }
+        else if (coll.gameObject.CompareTag("PlayerSword") && curHp <= 0)
+        {
+            StartCoroutine(die());
+        }
+        if (coll.gameObject.CompareTag("PlayerSkill1") && curHp > 0)
+        {
+            Destroy(coll.gameObject);
+            StartCoroutine(hurt(2));
+            StartCoroutine(knockBack());
+        }
+        else if (coll.gameObject.CompareTag("PlayerSkill1") && curHp <= 0)
+        {
+            StartCoroutine(die());
+            Destroy(coll.gameObject);
+        }
+
+        IEnumerator hurt(int _damage)
+        {
+            curHp -= _damage;
+            sprite.color = Color.red;
+            isHurt = true;
+
+            yield return new WaitForSeconds(0.3f);
+
+            sprite.color = Color.white;
+
+            yield return new WaitForSeconds(0.3f);
+
+            isHurt = false;
+        }
+
+        IEnumerator knockBack()
+        {
+            if (gameObject.transform.position.x > GameManager.instance.playerPos().x)
+            {
+                rigid.velocity = new Vector2(kDistance, 1f);
+            }
+            else if (gameObject.transform.position.x < GameManager.instance.playerPos().x)
+            {
+                rigid.velocity = new Vector2(-kDistance, 1f);
+            }
+
+            yield return null;
+        }
+
+        IEnumerator die()
+        {
+            anim.SetTrigger("isDie");
+            sprite.color = Color.red;
+            rigid.velocity = new Vector2(0, 2f);
+            SceneManager.LoadScene(4);
+
+            yield return new WaitForSeconds(1.5f);
+        }
+    }
 }
