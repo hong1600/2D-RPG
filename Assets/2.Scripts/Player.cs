@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     Animator anim;
     CapsuleCollider2D cap;
     SpriteRenderer sprite;
+    GameBtnManager gameBtnManager;
 
     [SerializeField] GameObject btnManager;
     [SerializeField] float maxHp;
@@ -57,6 +58,7 @@ public class Player : MonoBehaviour
     bool isLander;
     bool landering;
     bool inventoryon = false;
+    public bool skill1on;
 
     public float Maxhp
     { get { return maxHp; } }
@@ -210,7 +212,8 @@ public class Player : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Space) && doubleJump == true)
         {
-            rigid.AddForce(Vector2.up * dJumpForce, ForceMode2D.Impulse);
+            rigid.velocity = Vector2.zero;
+            rigid.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             doubleJump = false;
         }
     }
@@ -223,7 +226,8 @@ public class Player : MonoBehaviour
             StartCoroutine(sword());
         }
         else if (Input.GetKeyDown(KeyCode.A) && isSkill1 == false &&
-            isGround == true && isAttack == false && isDie == false && curMp >= 5f)    
+            isGround == true && isAttack == false && isDie == false && curMp >= 5f
+            && skill1on == true)    
         {
             StartCoroutine(skill1());
             curMp -= 5f;
@@ -348,7 +352,7 @@ public class Player : MonoBehaviour
             inventoryon = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Delete) && hpup <= 1)
+        if (Input.GetKeyDown(KeyCode.Delete) && hpup >= 1)
         {
             if (curHp >= 50)
             {
@@ -360,14 +364,9 @@ public class Player : MonoBehaviour
             }
 
             hpup -= 1;
-
-            if (hpup <= 0)
-            {
-                hpup = 0;
-            }
         }
 
-        if (Input.GetKeyDown(KeyCode.End) && mpup <= 1)
+        if (Input.GetKeyDown(KeyCode.End) && mpup >= 1)
         {
             if (curMp >= 50)
             {
@@ -379,13 +378,7 @@ public class Player : MonoBehaviour
             }
 
             mpup -= 1;
-
-            if (mpup <= 0)
-            {
-                mpup = 0;
-            }
         }
-
     }
 
     private void lander()

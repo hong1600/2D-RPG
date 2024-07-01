@@ -21,6 +21,8 @@ public class Boss : MonoBehaviour
     int nextMove;
     bool nTracking;
     bool lookRight;
+    bool isAttack;
+    float coolTime;
 
     [SerializeField] GameObject bossSkill1;
     [SerializeField] Transform bossSkill1Trs;
@@ -32,7 +34,6 @@ public class Boss : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
 
-        Invoke("attack", 3);
         Invoke("think", 2);
     }
 
@@ -41,6 +42,7 @@ public class Boss : MonoBehaviour
         checkPlayer();
         turn();
         checkGround();
+        cooltime();
     }
 
     private void FixedUpdate()
@@ -81,15 +83,19 @@ public class Boss : MonoBehaviour
             dirVec = Vector2.right;
             moveDir = 1f;
         }
+        else if (GameManager.instance == null)
+        { return; }
 
         if (Physics2D.Raycast(transform.position, dirVec, distance, LayerMask.GetMask("Player"))
             && nTracking == false)
         {
             tracking = true;
+            isAttack = true;
         }
         else
         {
             tracking = false;
+            isAttack = false;
         }
 
         Debug.DrawRay(transform.position, dirVec, Color.red);
@@ -130,10 +136,21 @@ public class Boss : MonoBehaviour
         }
     }
 
+    private void cooltime()
+    {
+        if (coolTime <= 0 && isAttack == true)
+        {
+            attack();
+            coolTime = 3f;
+        }
+
+        coolTime -= Time.deltaTime;
+    }
+
+
     private void attack()
     {
-        //int rand = Random.Range(0, 3);
-        int rand = 0;
+        int rand = Random.Range(0, 2);
 
         if (rand == 0)
         {
@@ -143,8 +160,6 @@ public class Boss : MonoBehaviour
         {
             StartCoroutine(attack2());
         }
-
-        Invoke("attack", 3);
     }
 
     IEnumerator attack1()
@@ -157,7 +172,7 @@ public class Boss : MonoBehaviour
         {
             Instantiate(bossSkill1, bossSkill1Trs.position, Quaternion.identity);
         }
-        else
+        else if (lookRight == false)
         {
             Instantiate(bossSkill1, bossSkill1Trs.position, Quaternion.Euler(0,0,-180));
         }
@@ -172,7 +187,7 @@ public class Boss : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D coll)
     {
-        if (coll.gameObject.CompareTag("PlayerSword") && curHp > 0)
+        if (coll.gameObject.CompareTag("PlayerSword") && curHp > 0 && isHurt == false)
         {
             StartCoroutine(hurt(1));
             StartCoroutine(knockBack());
@@ -181,7 +196,7 @@ public class Boss : MonoBehaviour
         {
             StartCoroutine(die());
         }
-        if (coll.gameObject.CompareTag("PlayerSkill1") && curHp > 0)
+        if (coll.gameObject.CompareTag("PlayerSkill1") && curHp > 0 && isHurt == false)
         {
             Destroy(coll.gameObject);
             StartCoroutine(hurt(2));

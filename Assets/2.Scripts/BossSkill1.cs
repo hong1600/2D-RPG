@@ -13,18 +13,16 @@ public class BossSkill1 : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody2D>();
         box = GetComponent<BoxCollider2D>();
-
-        if (transform.position.x < GameManager.instance.transform.position.x)
-        {
-            rigid.velocity = new Vector2(-speed, rigid.velocity.y);
-
-        }
-        else
-        {
-            rigid.velocity = new Vector2(speed, rigid.velocity.y);
-        }
     }
 
+    private void Update()
+    {
+        transform.position =
+            Vector3.MoveTowards(transform.position,
+            GameManager.instance.playerPos(), speed * Time.deltaTime);
+
+        Destroy(gameObject, 2);
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

@@ -60,13 +60,22 @@ public class UIManager : MonoBehaviour
         level.text = player.Level.ToString();
         skillPoint.text = player.SkillPoint.ToString();
         curCoin.text = player.playerCoin.ToString();
-        Hpup.text = player.hpup.ToString();
-        Mpup.text = player.mpup.ToString();
 
         
         curHpText.text = $"{player.Curhp} / {player.Maxhp}";
         curMpText.text = $"{player.CurMp} / {player.MaxMp}";
         curExpText.text = $"{player.Curexp} / {player.Maxexp}";
+
+        if (player.hpup <= 0)
+        {
+            Hpup.text = "0";
+            Mpup.text = "0";
+        }
+        else
+        {
+            Hpup.text = player.hpup.ToString();
+            Mpup.text = player.mpup.ToString();
+        }
     }
 
     private void statPanelOn()

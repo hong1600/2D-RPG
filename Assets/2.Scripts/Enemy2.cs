@@ -34,21 +34,13 @@ public class Enemy2 : MonoBehaviour
         box = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
-
-        Invoke("think", 2);
     }
 
 
     void Update()
     {
-        think();
         cooltime();
         turn();
-    }
-
-    private void think()
-    {
-        Invoke("think", 2);
     }
 
     private void cooltime()
@@ -87,14 +79,14 @@ public class Enemy2 : MonoBehaviour
     {
         int rand = Random.Range(0, 2);
 
-            if (rand == 0)
-            {
-                StartCoroutine(attack1());
-            }
-            else if (rand == 1)
-            {
-                StartCoroutine(attack2());
-            }
+        if (rand == 0)
+        {
+            StartCoroutine(attack1());
+        }
+        else if (rand == 1)
+        {
+            StartCoroutine(attack2());
+        }
     }
 
     IEnumerator attack1()

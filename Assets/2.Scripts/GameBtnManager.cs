@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class GameBtnManager : MonoBehaviour
 {
-
     public static GameBtnManager Instance;
 
     [SerializeField] Image skill1Img;
@@ -17,6 +16,7 @@ public class GameBtnManager : MonoBehaviour
     [SerializeField] GameObject realExitPanel;
     [SerializeField] GameObject skill1ImgOn;
     [SerializeField] GameObject menuPanel;
+    [SerializeField] GameObject skillAImg;
 
     private void Awake()
     {
@@ -31,6 +31,7 @@ public class GameBtnManager : MonoBehaviour
 
         DontDestroyOnLoad(this.gameObject);
     }
+
     public void skill1Btn()
     {
         if (Player.instance.SkillPoint > 0)
@@ -38,6 +39,8 @@ public class GameBtnManager : MonoBehaviour
             skill1Img.color = new Color(1, 1, 1, 1);
             skill1ImgOn.SetActive(true);
             Player.instance.curSkillPoint -= 1;
+            skillAImg.SetActive(true);
+            Player.instance.skill1on = true;
         }
     }
 
