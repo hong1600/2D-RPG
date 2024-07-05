@@ -69,13 +69,20 @@ public class UIManager : MonoBehaviour
         if (player.hpup <= 0)
         {
             Hpup.text = "0";
-            Mpup.text = "0";
         }
         else
         {
             Hpup.text = player.hpup.ToString();
+        }
+        if (player.mpup <= 0)
+        {
+            Mpup.text = "0";
+        }
+        else
+        {
             Mpup.text = player.mpup.ToString();
         }
+
     }
 
     private void statPanelOn()

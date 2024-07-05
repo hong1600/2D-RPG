@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.5
   curHp: 2
-  maxHp: 5
+  maxHp: 2
   kDistance: 2
   coin: {fileID: 2211482463824898107, guid: 2ffe174c3a30a784cbafc98dc70f09fe, type: 3}
   tree: {fileID: 6979438420916629015, guid: 83a359cd1a8f1e740ad502586209b738, type: 3}

@@ -11,12 +11,18 @@ public class GameBtnManager : MonoBehaviour
     public static GameBtnManager Instance;
 
     [SerializeField] Image skill1Img;
+    [SerializeField] Image skill2Img;
+    [SerializeField] Image skill3Img1;
+    [SerializeField] Image skill3Img2;
+    [SerializeField] Image skill3Img3;
 
-    [SerializeField] GameObject skill1Panel;
-    [SerializeField] GameObject realExitPanel;
-    [SerializeField] GameObject skill1ImgOn;
-    [SerializeField] GameObject menuPanel;
     [SerializeField] GameObject skillAImg;
+    [SerializeField] GameObject skillSImg;
+    [SerializeField] GameObject skillDImg;
+
+    [SerializeField] GameObject realExitPanel;
+
+    [SerializeField] GameObject menuPanel;
 
     private void Awake()
     {
@@ -37,12 +43,36 @@ public class GameBtnManager : MonoBehaviour
         if (Player.instance.SkillPoint > 0)
         {
             skill1Img.color = new Color(1, 1, 1, 1);
-            skill1ImgOn.SetActive(true);
             Player.instance.curSkillPoint -= 1;
             skillAImg.SetActive(true);
             Player.instance.skill1on = true;
         }
     }
+
+    public void skill2Btn()
+    {
+        if (Player.instance.SkillPoint > 0)
+        {
+            skill2Img.color = new Color(1, 1, 1, 1);
+            Player.instance.curSkillPoint -= 1;
+            skillSImg.SetActive(true);
+            Player.instance.skill2on = true;
+        }
+    }
+
+    public void skill3Btn()
+    {
+        if (Player.instance.SkillPoint > 0)
+        {
+            skill3Img1.color = new Color(1, 1, 1, 1);
+            skill3Img2.color = new Color(1, 1, 1, 1);
+            skill3Img3.color = new Color(1, 1, 1, 1);
+            Player.instance.curSkillPoint -= 1;
+            skillDImg.SetActive(true);
+            Player.instance.skill3on = true;
+        }
+    }
+
 
     public void MenuPanelOnBtn()
     {

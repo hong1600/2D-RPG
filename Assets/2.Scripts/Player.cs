@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Transactions;
 
 public class Player : MonoBehaviour
 {
@@ -30,8 +31,15 @@ public class Player : MonoBehaviour
     [SerializeField] float knockBackPower;
     [SerializeField] GameObject swordBox;
     [SerializeField] GameObject fireBall;
+    [SerializeField] GameObject fireHand;
+    [SerializeField] GameObject meteors;
     GameObject scanObject;
     [SerializeField] Transform fireBallTrs;
+    [SerializeField] Transform fireHandTrs;
+    [SerializeField] Transform meteorsTrs1;
+    [SerializeField] Transform meteorsTrs2;
+    [SerializeField] Transform meteorsTrs3;
+    [SerializeField] Transform meteorsTrs4;
     [SerializeField] Slider hpSlider;
     [SerializeField] float fallSpeed;
     [SerializeField] float walldistance;
@@ -46,7 +54,6 @@ public class Player : MonoBehaviour
     public bool isGround;
     bool isMove;
     bool isAttack;
-    bool isSkill1;
     bool isDie = false;
     bool isHurt;
     bool isJump;
@@ -59,6 +66,8 @@ public class Player : MonoBehaviour
     bool landering;
     bool inventoryon = false;
     public bool skill1on;
+    public bool skill2on;
+    public bool skill3on;
 
     public float Maxhp
     { get { return maxHp; } }
@@ -125,7 +134,7 @@ public class Player : MonoBehaviour
         //Vector2 movePos = transform.position;
 
         if (moveInput != 0 && isAttack == false && isDie == false && isWallJump == false 
-            && isSkill1 == false && GameManager.instance.isAction == false && landering == false)
+            && GameManager.instance.isAction == false && landering == false)
         {
             isMove = true;
             anim.SetBool("isWalk", true);
@@ -159,14 +168,14 @@ public class Player : MonoBehaviour
     private void turn()
     {
         if (Input.GetAxis("Horizontal") < 0 && isDie == false
-            && isAttack == false && isSkill1 == false && landering == false)
+            && isAttack == false && landering == false)
         {
             gameObject.transform.transform.localScale = new Vector3(-1.5f, 1.5f, 1);
             //sprite.flipX = true;
             isRight = -1f;
         }
         else if (Input.GetAxis("Horizontal") > 0 && isDie == false 
-            && isAttack == false && isSkill1 == false && landering == false)
+            && isAttack == false && landering == false)
         {
             gameObject.transform.transform.localScale = new Vector3(1.5f, 1.5f, 1);
             //sprite.flipX = false;
@@ -217,20 +226,33 @@ public class Player : MonoBehaviour
             doubleJump = false;
         }
     }
-
     private void attack()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl) && isSkill1 == false &&
-            isGround == true && isAttack == false && isDie == false)
+        if (Input.GetKeyDown(KeyCode.LeftControl) && isGround == true &&
+            isAttack == false && isDie == false)
         {
             StartCoroutine(sword());
         }
-        else if (Input.GetKeyDown(KeyCode.A) && isSkill1 == false &&
-            isGround == true && isAttack == false && isDie == false && curMp >= 5f
+        else if (Input.GetKeyDown(KeyCode.A) && isGround == true 
+            && isAttack == false && isDie == false && curMp >= 5f
             && skill1on == true)    
         {
             StartCoroutine(skill1());
             curMp -= 5f;
+        }
+        else if (Input.GetKeyDown(KeyCode.S) && isGround == true
+        && isAttack == false && isDie == false && curMp >= 10f
+        && skill2on == true)
+        {
+            StartCoroutine(skill2());
+            curMp -= 10f;
+        }
+        else if (Input.GetKeyDown(KeyCode.D) && isGround == true
+        && isAttack == false && isDie == false && curMp >= 20f
+        && skill3on == true)
+        {
+            StartCoroutine(skill3());
+            curMp -= 20f;
         }
     }
 
@@ -256,13 +278,39 @@ public class Player : MonoBehaviour
     IEnumerator skill1()
     {
         anim.SetBool("isSkill1", true);
-        isSkill1 = true;
+        isAttack = true;
         Instantiate(fireBall, fireBallTrs.position, Quaternion.Euler(0, 0, 40));
 
         yield return new WaitForSeconds(0.5f);
 
         anim.SetBool("isSkill1", false);
-        isSkill1 = false;
+        isAttack = false;
+    }
+    IEnumerator skill2()
+    {
+        anim.SetBool("isSkill1", true);
+        isAttack = true;
+        Instantiate(fireHand, fireHandTrs.position, Quaternion.Euler(0, 0, 0));
+
+        yield return new WaitForSeconds(0.5f);
+
+        anim.SetBool("isSkill1", false);
+        isAttack = false;
+    }
+    IEnumerator skill3()
+    {
+        anim.SetBool("isSkill1", true);
+        isAttack = true;
+        Instantiate(meteors, meteorsTrs1.position, Quaternion.Euler(0, 0, 0));
+        Instantiate(meteors, meteorsTrs2.position, Quaternion.Euler(0, 0, 0));
+        Instantiate(meteors, meteorsTrs3.position, Quaternion.Euler(0, 0, 0));
+        Instantiate(meteors, meteorsTrs4.position, Quaternion.Euler(0, 0, 0));
+
+        yield return new WaitForSeconds(0.5f);
+
+        anim.SetBool("isSkill1", false);
+        isAttack = false;
+
     }
 
     private void checkWall()
@@ -315,7 +363,7 @@ public class Player : MonoBehaviour
         {
             curLevel += 1;
             curExp = 0;
-            maxExp += 3;
+            maxExp += 1;
             curSkillPoint += 1;
         }
     }
@@ -403,45 +451,32 @@ public class Player : MonoBehaviour
         {
             StartCoroutine(hurt(10));
             StartCoroutine(knockBack(coll.gameObject));
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
         }
-        else if (coll.gameObject.CompareTag("Enemy2Attack1") && curHp <= 0)
-        {
-            StartCoroutine(die());
-        }
-
         if (coll.gameObject.CompareTag("Enemy2Attack2") && curHp > 0 && isHurt == false)
         {
             StartCoroutine(hurt(20));
             StartCoroutine(knockBack(coll.gameObject));
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
         }
-        else if (coll.gameObject.CompareTag("Enemy2Attack2") && curHp <= 0)
+        if (coll.gameObject.CompareTag("BossAttack1"))
         {
-            StartCoroutine(die());
+            StartCoroutine(hurt(10));
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
         }
 
         if (coll.gameObject.CompareTag("Lander"))
         {
             isLander = true;
-        }
-
-        if (coll.gameObject.CompareTag("BossAttack1"))
-        {
-            StartCoroutine(hurt(10));
-        }
-
-        else if (coll.gameObject.CompareTag("BossAttack1") && curHp <= 0)
-        {
-            StartCoroutine(die());
-        }
-
-        if (coll.gameObject.CompareTag("BossAttack1"))
-        {
-            StartCoroutine(hurt(10));
-        }
-
-        else if (coll.gameObject.CompareTag("BossAttack1") && curHp <= 0)
-        {
-            StartCoroutine(die());
         }
     }
 
@@ -452,20 +487,19 @@ public class Player : MonoBehaviour
         {
             StartCoroutine(hurt(5));
             StartCoroutine(knockBack(coll.gameObject));
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
         }
-        else if (coll.collider.CompareTag("Enemy") && curHp <= 0)
-        {
-            StartCoroutine(die());
-        }
-
         if (coll.collider.CompareTag("Boss") && curHp > 0 && isHurt == false)
         {
             StartCoroutine(hurt(10));
             StartCoroutine(knockBack(coll.gameObject));
-        }
-        else if (coll.collider.CompareTag("Boss") && curHp <= 0)
-        {
-            StartCoroutine(die());
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
         }
 
         if (coll.collider.CompareTag("Coin"))

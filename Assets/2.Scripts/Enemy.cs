@@ -34,6 +34,9 @@ public class Enemy : MonoBehaviour
 
         Invoke("think", 2);
     }
+    private void Start()
+    {
+    }
 
     void Update()
     {
@@ -119,29 +122,44 @@ public class Enemy : MonoBehaviour
         {
             StartCoroutine(hurt(1));
             StartCoroutine(knockBack());
-        }
-        else if (coll.gameObject.CompareTag("PlayerSword") && curHp <= 0)
-        {
-            StartCoroutine(die());
-            box.enabled = false;
-            Instantiate(coin, gameObject.transform.position, Quaternion.identity);
-            //Instantiate(tree, gameObject.transform.position, Quaternion.Euler(0, 0, -90));
+            if(curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
         }
         if (coll.gameObject.CompareTag("PlayerSkill1") && curHp > 0)
         {
             Destroy(coll.gameObject);
             StartCoroutine(hurt(2));
             StartCoroutine(knockBack());
-        }
-        else if (coll.gameObject.CompareTag("PlayerSkill1") && curHp <= 0)
-        {
-            StartCoroutine(die());
-            Destroy(coll.gameObject);
-            box.enabled = false;
-            Instantiate(coin, gameObject.transform.position, Quaternion.identity);
-            //Instantiate(tree, gameObject.transform.position, Quaternion.Euler(0, 0, -90));
-        }
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
 
+        }
+        if (coll.gameObject.CompareTag("PlayerSkill2") && curHp > 0)
+        {
+            Destroy(coll.gameObject);
+            StartCoroutine(hurt(5));
+            StartCoroutine(knockBack());
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
+
+        }
+        if (coll.gameObject.CompareTag("PlayerSkill3") && curHp > 0)
+        {
+            Destroy(coll.gameObject);
+            StartCoroutine(hurt(10));
+            StartCoroutine(knockBack());
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
+
+        }
     }
 
     IEnumerator hurt(int _damage)
@@ -179,6 +197,7 @@ public class Enemy : MonoBehaviour
         EnemySpawn.instance.enemyCount--;
         sprite.color = Color.red;
         rigid.velocity = new Vector2(0, 2f);
+        box.enabled = false;
 
         yield return new WaitForSeconds(1.5f);
 

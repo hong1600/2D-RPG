@@ -21,6 +21,8 @@ TagManager:
   - Wall
   - Lever
   - Lander
+  - PlayerSkill2
+  - PlayerSkill3
   layers:
   - Default
   - TransparentFX
