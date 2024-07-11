@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8554648576541477822}
   m_Layer: 0
   m_Name: Napalm
-  m_TagString: Untagged
+  m_TagString: PlayerSkill4
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

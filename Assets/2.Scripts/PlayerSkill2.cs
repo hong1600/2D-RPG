@@ -20,7 +20,7 @@ public class PlayerSkill2 : MonoBehaviour
 
         Invoke("oncoll", 1f);
 
-        Destroy(gameObject, 3f);
+        Destroy(gameObject, 2.5f);
     }
 
     private void oncoll()

@@ -15,12 +15,12 @@ public class Boss : MonoBehaviour
     [SerializeField] bool tracking;
     [SerializeField] float speed;
     [SerializeField] float curHp;
-    [SerializeField] float kDistance;
+    [SerializeField] float knockDistance;
     bool isHurt;
     float moveDir;
     int nextMove;
     bool nTracking;
-    bool lookRight;
+    bool attackReady;
     bool isAttack;
     float coolTime;
 
@@ -39,6 +39,7 @@ public class Boss : MonoBehaviour
 
     void Update()
     {
+        move();
         checkPlayer();
         turn();
         checkGround();
@@ -47,19 +48,39 @@ public class Boss : MonoBehaviour
 
     private void FixedUpdate()
     {
-        move();
     }
 
     private void move()
     {
-        if (tracking == false)
+        if (tracking == false && isAttack == false && isHurt == false)
         {
             rigid.velocity = new Vector2(nextMove * speed, rigid.velocity.y);
         }
-
-        if (tracking == true)
+        else if (tracking == true && isAttack == false && isHurt == false)
         {
             rigid.velocity = new Vector2(moveDir * speed, rigid.velocity.y);
+        }
+        else if (isAttack == true || isHurt == true) 
+        {
+            rigid.velocity = new Vector2(0, 0);
+        }
+    }
+    private void turn()
+    {
+        if (rigid.velocity.x < 0)
+        {
+            transform.localScale = new Vector3(-1.5f, transform.localScale.y, 1);
+            anim.SetBool("isMove", true);
+        }
+        else if (rigid.velocity.x > 0)
+        {
+            transform.localScale = new Vector3(1.5f, transform.localScale.y, 1);
+            anim.SetBool("isMove", true);
+        }
+        else if (rigid.velocity.x == 0)
+        {
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, 1);
+            anim.SetBool("isMove", false);
         }
     }
 
@@ -69,7 +90,6 @@ public class Boss : MonoBehaviour
 
         Invoke("think", 2);
     }
-
 
     private void checkPlayer()
     {
@@ -90,30 +110,17 @@ public class Boss : MonoBehaviour
             && nTracking == false)
         {
             tracking = true;
-            isAttack = true;
+            attackReady = true;
         }
         else
         {
             tracking = false;
-            isAttack = false;
+            attackReady = false;
         }
 
         Debug.DrawRay(transform.position, dirVec, Color.red);
     }
 
-    private void turn()
-    {
-        if (tracking && GameManager.instance.player.transform.position.x < gameObject.transform.position.x)
-        {
-            transform.localScale = new Vector3(-1.5f, 1.5f, 1);
-            lookRight = false;
-        }
-        else if (GameManager.instance.player.transform.position.x > gameObject.transform.position.x)
-        {
-            transform.localScale = new Vector3(1.5f, 1.5f, 1);
-            lookRight = true;
-        }
-    }
 
     private void checkGround()
     {
@@ -138,7 +145,7 @@ public class Boss : MonoBehaviour
 
     private void cooltime()
     {
-        if (coolTime <= 0 && isAttack == true)
+        if (coolTime <= 0 && attackReady == true)
         {
             attack();
             coolTime = 3f;
@@ -150,7 +157,8 @@ public class Boss : MonoBehaviour
 
     private void attack()
     {
-        int rand = Random.Range(0, 2);
+        //int rand = Random.Range(0, 2);
+        int rand = 0;
 
         if (rand == 0)
         {
@@ -165,18 +173,20 @@ public class Boss : MonoBehaviour
     IEnumerator attack1()
     {
         anim.SetBool("isAttack1", true);
+        isAttack = true;
 
         yield return new WaitForSeconds(1f);
 
-        if (lookRight == true)
+        if (dirVec == Vector2.right)
         {
             Instantiate(bossSkill1, bossSkill1Trs.position, Quaternion.identity);
         }
-        else if (lookRight == false)
+        else if (dirVec == Vector2.left)
         {
             Instantiate(bossSkill1, bossSkill1Trs.position, Quaternion.Euler(0,0,-180));
         }
         anim.SetBool("isAttack1", false);
+        isAttack = false;
     }
 
     IEnumerator attack2()
@@ -190,61 +200,89 @@ public class Boss : MonoBehaviour
         if (coll.gameObject.CompareTag("PlayerSword") && curHp > 0 && isHurt == false)
         {
             StartCoroutine(hurt(1));
-            StartCoroutine(knockBack());
-        }
-        else if (coll.gameObject.CompareTag("PlayerSword") && curHp <= 0)
-        {
-            StartCoroutine(die());
+            StartCoroutine(knockBack(coll.gameObject));
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
         }
         if (coll.gameObject.CompareTag("PlayerSkill1") && curHp > 0 && isHurt == false)
         {
             Destroy(coll.gameObject);
             StartCoroutine(hurt(2));
-            StartCoroutine(knockBack());
-        }
-        else if (coll.gameObject.CompareTag("PlayerSkill1") && curHp <= 0)
-        {
-            StartCoroutine(die());
-            Destroy(coll.gameObject);
-        }
-
-        IEnumerator hurt(int _damage)
-        {
-            curHp -= _damage;
-            sprite.color = Color.red;
-            isHurt = true;
-
-            yield return new WaitForSeconds(0.3f);
-
-            sprite.color = Color.white;
-
-            yield return new WaitForSeconds(0.3f);
-
-            isHurt = false;
-        }
-
-        IEnumerator knockBack()
-        {
-            if (gameObject.transform.position.x > GameManager.instance.playerPos().x)
+            StartCoroutine(knockBack(coll.gameObject));
+            if (curHp <= 0)
             {
-                rigid.velocity = new Vector2(kDistance, 1f);
+                StartCoroutine(die());
             }
-            else if (gameObject.transform.position.x < GameManager.instance.playerPos().x)
-            {
-                rigid.velocity = new Vector2(-kDistance, 1f);
-            }
-
-            yield return null;
         }
-
-        IEnumerator die()
+        if (coll.gameObject.CompareTag("PlayerSkill2") && curHp > 0 && isHurt == false)
         {
-            anim.SetTrigger("isDie");
-            sprite.color = Color.red;
-            rigid.velocity = new Vector2(0, 2f);
-            SceneManager.LoadScene(4);
-
-            yield return new WaitForSeconds(1.5f);
+            StartCoroutine(hurt(1));
+            StartCoroutine(knockBack(coll.gameObject));
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
+        }
+        if (coll.gameObject.CompareTag("PlayerSkill3") && curHp > 0 && isHurt == false)
+        {
+            StartCoroutine(hurt(1));
+            StartCoroutine(knockBack(coll.gameObject));
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
+        }
+        if (coll.gameObject.CompareTag("PlayerSkill4") && curHp > 0 && isHurt == false)
+        {
+            StartCoroutine(hurt(1));
+            StartCoroutine(knockBack(coll.gameObject));
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
         }
     }
+
+    IEnumerator hurt(int _damage)
+    {
+        curHp -= _damage;
+        sprite.color = Color.red;
+        isHurt = true;
+        anim.SetTrigger("isHurt");
+
+        yield return new WaitForSeconds(0.3f);
+
+        sprite.color = Color.white;
+
+        yield return new WaitForSeconds(0.3f);
+
+        isHurt = false;
+    }
+
+    IEnumerator knockBack(GameObject coll)
+    {
+        if (gameObject.transform.position.x > coll.transform.position.x)
+        {
+            rigid.velocity = new Vector2(knockDistance, 1f);
+        }
+        else if (gameObject.transform.position.x < coll.transform.position.x)
+        {
+            rigid.velocity = new Vector2(-knockDistance, 1f);
+        }
+
+        yield return null;
+    }
+
+    IEnumerator die()
+    {
+        anim.SetTrigger("isDie");
+        sprite.color = Color.red;
+        rigid.velocity = new Vector2(0, 2f);
+        SceneManager.LoadScene(4);
+
+        yield return new WaitForSeconds(1.5f);
+    }
+
 }

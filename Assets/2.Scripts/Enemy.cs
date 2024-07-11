@@ -140,7 +140,6 @@ public class Enemy : MonoBehaviour
         }
         if (coll.gameObject.CompareTag("PlayerSkill2") && curHp > 0)
         {
-            Destroy(coll.gameObject);
             StartCoroutine(hurt(5));
             StartCoroutine(knockBack());
             if (curHp <= 0)
@@ -151,7 +150,6 @@ public class Enemy : MonoBehaviour
         }
         if (coll.gameObject.CompareTag("PlayerSkill3") && curHp > 0)
         {
-            Destroy(coll.gameObject);
             StartCoroutine(hurt(10));
             StartCoroutine(knockBack());
             if (curHp <= 0)
@@ -198,6 +196,7 @@ public class Enemy : MonoBehaviour
         sprite.color = Color.red;
         rigid.velocity = new Vector2(0, 2f);
         box.enabled = false;
+        Instantiate(coin, gameObject.transform.position, Quaternion.identity);
 
         yield return new WaitForSeconds(1.5f);
 

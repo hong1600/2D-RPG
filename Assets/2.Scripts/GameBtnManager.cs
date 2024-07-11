@@ -24,6 +24,11 @@ public class GameBtnManager : MonoBehaviour
 
     [SerializeField] GameObject menuPanel;
 
+    [SerializeField] GameObject diePanel;
+
+    Animator playeranim;
+    Rigidbody2D playerrigid;
+
     private void Awake()
     {
         if (Instance == null)
@@ -38,12 +43,18 @@ public class GameBtnManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
+    private void Start()
+    {
+        playeranim = Player.instance.GetComponent<Animator>();
+        playerrigid = Player.instance.GetComponent<Rigidbody2D>();
+    }
+
     public void skill1Btn()
     {
         if (Player.instance.SkillPoint > 0)
         {
             skill1Img.color = new Color(1, 1, 1, 1);
-            Player.instance.curSkillPoint -= 1;
+            Player.instance.skillPoint -= 1;
             skillAImg.SetActive(true);
             Player.instance.skill1on = true;
         }
@@ -54,7 +65,7 @@ public class GameBtnManager : MonoBehaviour
         if (Player.instance.SkillPoint > 0)
         {
             skill2Img.color = new Color(1, 1, 1, 1);
-            Player.instance.curSkillPoint -= 1;
+            Player.instance.skillPoint -= 1;
             skillSImg.SetActive(true);
             Player.instance.skill2on = true;
         }
@@ -67,7 +78,7 @@ public class GameBtnManager : MonoBehaviour
             skill3Img1.color = new Color(1, 1, 1, 1);
             skill3Img2.color = new Color(1, 1, 1, 1);
             skill3Img3.color = new Color(1, 1, 1, 1);
-            Player.instance.curSkillPoint -= 1;
+            Player.instance.skillPoint -= 1;
             skillDImg.SetActive(true);
             Player.instance.skill3on = true;
         }
@@ -99,6 +110,9 @@ public class GameBtnManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
         realExitPanel.SetActive(false);
+        playerrigid.constraints = RigidbodyConstraints2D.FreezePositionX;
+        playerrigid.constraints = RigidbodyConstraints2D.FreezePositionY;
+        DataManager.instance.saveData();
     }
 
     public void hpBtn()
@@ -117,5 +131,14 @@ public class GameBtnManager : MonoBehaviour
             Player.instance.coin -= 5;
             Player.instance.mpup += 1;
         }
+    }
+
+    public void dieBtn()
+    {
+        Player.instance.isdie = false;
+        Player.instance.Curhp = Player.instance.Maxhp;
+        Player.instance.Curmp = Player.instance.Maxmp;
+        playeranim.Rebind();
+        diePanel.SetActive(false);
     }
 }

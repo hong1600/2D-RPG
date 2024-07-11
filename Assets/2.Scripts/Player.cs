@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Transactions;
 
 public class Player : MonoBehaviour
 {
@@ -13,17 +12,16 @@ public class Player : MonoBehaviour
     Animator anim;
     CapsuleCollider2D cap;
     SpriteRenderer sprite;
-    GameBtnManager gameBtnManager;
 
-    [SerializeField] GameObject btnManager;
+    string playerName;
     [SerializeField] float maxHp;
     [SerializeField] float curHp;
     [SerializeField] float maxMp;
     [SerializeField] float curMp;
     [SerializeField] float maxExp;
+    [SerializeField] int level = 1;
     public float curExp;
-    [SerializeField] int curLevel = 1;
-    public int curSkillPoint = 0;
+    public int skillPoint = 0;
     [SerializeField] float moveSpeed;
     [SerializeField] float jumpForce;
     [SerializeField] float dJumpForce;
@@ -45,6 +43,7 @@ public class Player : MonoBehaviour
     [SerializeField] float walldistance;
     [SerializeField] float wallJump;
     [SerializeField] GameObject inventoryPanel;
+    [SerializeField] GameObject diePanel;
     Vector2 dirVec;
     public int coin;
     public int hpup = 0;
@@ -63,7 +62,7 @@ public class Player : MonoBehaviour
     float isRight;
     bool skillPanelOn;
     bool isLander;
-    bool landering;
+    bool isLandering;
     bool inventoryon = false;
     public bool skill1on;
     public bool skill2on;
@@ -72,21 +71,24 @@ public class Player : MonoBehaviour
     public float Maxhp
     { get { return maxHp; } }
     public float Curhp
-    { get { return curHp; } }
-    public float MaxMp
+    { get { return curHp; } set { curHp = value; } }
+    public float Maxmp
     { get { return maxMp; } }
-    public float CurMp
-    { get { return curMp; } }
+    public float Curmp
+    { get { return curMp; } set { curMp = value; } }
     public float Maxexp
     { get { return maxExp; } }
     public float Curexp
     { get { return curExp; } set { curExp = value; } }
     public int Level
-    { get { return curLevel; } }
+    { get { return level; } }
     public int SkillPoint
-    { get { return curSkillPoint; } }
+    { get { return skillPoint; } }
     public int playerCoin
     { get { return coin; } }
+    public bool isdie
+    { get { return isDie; } set { isDie = value; } }
+
 
 
     private void Awake()
@@ -108,13 +110,26 @@ public class Player : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
     }
 
+    private void Start()
+    {
+        name = DataManager.instance.curPlayer.name;
+        level = DataManager.instance.curPlayer.level;
+        curExp = DataManager.instance.curPlayer.curExp;
+        curHp = DataManager.instance.curPlayer.curHp;
+        curMp = DataManager.instance.curPlayer.curMp;
+        skillPoint = DataManager.instance.curPlayer.skillPoint;
+        coin = DataManager.instance.curPlayer.coin;
+    }
+
     private void FixedUpdate()
     {
+        if (isDie) return;
         move();
     }
 
     private void Update()
     {
+        if (isDie) return;
         turn();
         checkGround();
         jump();
@@ -122,7 +137,7 @@ public class Player : MonoBehaviour
         checkWall();
         fallWall();
         jumpWall();
-        level();
+        levelUp();
         scanObj();
         lander();
         fuction();
@@ -133,8 +148,8 @@ public class Player : MonoBehaviour
         float moveInput = Input.GetAxis("Horizontal");
         //Vector2 movePos = transform.position;
 
-        if (moveInput != 0 && isAttack == false && isDie == false && isWallJump == false 
-            && GameManager.instance.isAction == false && landering == false)
+        if (moveInput != 0 && isAttack == false && isWallJump == false 
+            && GameManager.instance.isAction == false && isLandering == false)
         {
             isMove = true;
             anim.SetBool("isWalk", true);
@@ -167,15 +182,15 @@ public class Player : MonoBehaviour
 
     private void turn()
     {
-        if (Input.GetAxis("Horizontal") < 0 && isDie == false
-            && isAttack == false && landering == false)
+        if (Input.GetAxis("Horizontal") < 0
+            && isAttack == false && isLandering == false)
         {
             gameObject.transform.transform.localScale = new Vector3(-1.5f, 1.5f, 1);
             //sprite.flipX = true;
             isRight = -1f;
         }
-        else if (Input.GetAxis("Horizontal") > 0 && isDie == false 
-            && isAttack == false && landering == false)
+        else if (Input.GetAxis("Horizontal") > 0 
+            && isAttack == false && isLandering == false)
         {
             gameObject.transform.transform.localScale = new Vector3(1.5f, 1.5f, 1);
             //sprite.flipX = false;
@@ -214,7 +229,7 @@ public class Player : MonoBehaviour
     private void jump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && isGround == true &&
-            isAttack == false && isDie == false && isWall == false)
+            isAttack == false && isWall == false)
         {
             rigid.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             doubleJump = true;
@@ -229,27 +244,24 @@ public class Player : MonoBehaviour
     private void attack()
     {
         if (Input.GetKeyDown(KeyCode.LeftControl) && isGround == true &&
-            isAttack == false && isDie == false)
+            isAttack == false)
         {
             StartCoroutine(sword());
         }
         else if (Input.GetKeyDown(KeyCode.A) && isGround == true 
-            && isAttack == false && isDie == false && curMp >= 5f
-            && skill1on == true)    
+            && isAttack == false && curMp >= 5f && skill1on == true)    
         {
             StartCoroutine(skill1());
             curMp -= 5f;
         }
         else if (Input.GetKeyDown(KeyCode.S) && isGround == true
-        && isAttack == false && isDie == false && curMp >= 10f
-        && skill2on == true)
+        && isAttack == false && curMp >= 10f && skill2on == true)
         {
             StartCoroutine(skill2());
             curMp -= 10f;
         }
         else if (Input.GetKeyDown(KeyCode.D) && isGround == true
-        && isAttack == false && isDie == false && curMp >= 20f
-        && skill3on == true)
+        && isAttack == false && curMp >= 20f && skill3on == true)
         {
             StartCoroutine(skill3());
             curMp -= 20f;
@@ -357,20 +369,21 @@ public class Player : MonoBehaviour
         isMove = false;
     }
 
-    private void level()
+    private void levelUp()
     {
         if( maxExp <= curExp ) 
         {
-            curLevel += 1;
+            DataManager.instance.curPlayer.level++;
             curExp = 0;
             maxExp += 1;
-            curSkillPoint += 1;
+            skillPoint += 1;
         }
     }
 
     private void scanObj()
     {
-        RaycastHit2D hit = Physics2D.Raycast(cap.transform.position, dirVec, 1, LayerMask.GetMask("Object"));
+        RaycastHit2D hit = Physics2D.Raycast(cap.transform.position, 
+            dirVec, 1, LayerMask.GetMask("Object"));
 
         if (hit.collider != null)
         {
@@ -435,43 +448,39 @@ public class Player : MonoBehaviour
 
         if (isLander == true && moveInput != 0)
         {
+            rigid.velocity = new Vector2(0, moveInput * landerSpeed);
             anim.SetBool("isLander", true);
-            rigid.velocity = new Vector2 (0, moveInput * landerSpeed);
-            landering = true;
+            rigid.gravityScale = 0;
+            isLandering = true;
         }
-        else
+        else if (isLander == true && moveInput == 0)
+        {
+            rigid.velocity = new Vector2(0, 0);
+            rigid.gravityScale = 0;
+        }
+        else if (isLander == false)
         {
             anim.SetBool("isLander", false);
-            landering = false;
+            rigid.gravityScale = 1;
+            isLandering = false;
         }
     }
+
     private void OnTriggerEnter2D(Collider2D coll)
     {
         if (coll.gameObject.CompareTag("Enemy2Attack1") && curHp > 0 && isHurt == false)
         {
             StartCoroutine(hurt(10));
             StartCoroutine(knockBack(coll.gameObject));
-            if (curHp <= 0)
-            {
-                StartCoroutine(die());
-            }
         }
         if (coll.gameObject.CompareTag("Enemy2Attack2") && curHp > 0 && isHurt == false)
         {
             StartCoroutine(hurt(20));
             StartCoroutine(knockBack(coll.gameObject));
-            if (curHp <= 0)
-            {
-                StartCoroutine(die());
-            }
         }
         if (coll.gameObject.CompareTag("BossAttack1"))
         {
             StartCoroutine(hurt(10));
-            if (curHp <= 0)
-            {
-                StartCoroutine(die());
-            }
         }
 
         if (coll.gameObject.CompareTag("Lander"))
@@ -480,6 +489,13 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit2D(Collider2D coll)
+    {
+        if (coll.gameObject.CompareTag("Lander"))
+        {
+            isLander = false;
+        }
+    }
 
     private void OnCollisionEnter2D(Collision2D coll)
     {
@@ -487,44 +503,38 @@ public class Player : MonoBehaviour
         {
             StartCoroutine(hurt(5));
             StartCoroutine(knockBack(coll.gameObject));
-            if (curHp <= 0)
-            {
-                StartCoroutine(die());
-            }
         }
         if (coll.collider.CompareTag("Boss") && curHp > 0 && isHurt == false)
         {
             StartCoroutine(hurt(10));
             StartCoroutine(knockBack(coll.gameObject));
-            if (curHp <= 0)
-            {
-                StartCoroutine(die());
-            }
         }
-
         if (coll.collider.CompareTag("Coin"))
         {
-            coin += 10;
+            DataManager.instance.curPlayer.coin += 10;
             Destroy(coll.gameObject);
         }
     }
 
-
     IEnumerator hurt(int damage)
     {
-        if (curHp > damage)
+        if (isDie == true)
         {
-            curHp -= damage;
+            yield break;
         }
-        else
-        {
-            curHp = 0;
-        }
+        curHp -= damage;
         isHurt = true;
         anim.SetTrigger("isHurt");
         isAttack = true;
 
         yield return new WaitForSeconds(0.3f);
+
+        if (curHp <= 0)
+        {
+            isDie = true;
+            anim.SetTrigger("isDie");
+            diePanel.SetActive(true);
+        }
 
         isHurt = false;
         isAttack = false;
@@ -542,13 +552,4 @@ public class Player : MonoBehaviour
         }
         yield return null;
     }
-
-    IEnumerator die()
-    {
-        isDie = true;
-        anim.SetTrigger("isDie");
-        yield return null;
-    }
-
-
 }

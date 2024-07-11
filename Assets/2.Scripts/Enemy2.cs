@@ -16,6 +16,9 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] Transform skill1Pos1;
     [SerializeField] Transform skill1Pos2;
     [SerializeField] Transform skill1Pos3;
+    [SerializeField] Transform skill1Pos4;
+    [SerializeField] Transform skill1Pos5;
+    [SerializeField] Transform skill1Pos6;
 
     [SerializeField] float curHp;
     float maxHp;
@@ -48,7 +51,7 @@ public class Enemy2 : MonoBehaviour
         if (coolTime <= 0 && isAttack == true)
         {
             bossAttack();
-            coolTime = 3f;
+            coolTime = 4f;
         }
 
         coolTime -= Time.deltaTime;
@@ -58,12 +61,10 @@ public class Enemy2 : MonoBehaviour
     {
         if (GameManager.instance.playerPos().x < transform.position.x)
         {
-            transform.localScale = new Vector3(1.5f, 1.5f, 1);
             dirVec = Vector2.left;
         }
         else
         {
-            transform.localScale = new Vector3(-1.5f, 1.5f, 1);
             dirVec = Vector2.right;
         }
 
@@ -77,7 +78,8 @@ public class Enemy2 : MonoBehaviour
 
     private void bossAttack()
     {
-        int rand = Random.Range(0, 2);
+        //int rand = Random.Range(0, 2);
+        int rand = 1;
 
         if (rand == 0)
         {
@@ -110,15 +112,18 @@ public class Enemy2 : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         Instantiate(skill1, skill1Pos1.position, Quaternion.identity);
+        Instantiate(skill1, skill1Pos4.position, Quaternion.identity);
         anim.SetBool("Attack2", false);
 
         yield return new WaitForSeconds(0.5f);
 
         Instantiate(skill1, skill1Pos2.position, Quaternion.identity);
+        Instantiate(skill1, skill1Pos5.position, Quaternion.identity);
 
         yield return new WaitForSeconds(0.5f);
 
         Instantiate(skill1, skill1Pos3.position, Quaternion.identity);
+        Instantiate(skill1, skill1Pos6.position, Quaternion.identity);
     }
 
     private void OnTriggerEnter2D(Collider2D coll)
@@ -127,23 +132,47 @@ public class Enemy2 : MonoBehaviour
         {
             StartCoroutine(hurt(1));
             StartCoroutine(knockBack());
-        }
-        else if (coll.gameObject.CompareTag("PlayerSword") && curHp <= 0)
-        {
-            StartCoroutine(die());
-            Instantiate(coin, gameObject.transform.position, Quaternion.identity);
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
         }
         if (coll.gameObject.CompareTag("PlayerSkill1") && curHp > 0)
         {
             Destroy(coll.gameObject);
             StartCoroutine(hurt(2));
             StartCoroutine(knockBack());
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
         }
-        else if (coll.gameObject.CompareTag("PlayerSkill1") && curHp <= 0)
+        if (coll.gameObject.CompareTag("PlayerSkill2") && curHp > 0 && isHurt == false)
         {
-            StartCoroutine(die());
-            Destroy(coll.gameObject);
-            Instantiate(coin, gameObject.transform.position, Quaternion.identity);
+            StartCoroutine(hurt(1));
+            StartCoroutine(knockBack());
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
+        }
+        if (coll.gameObject.CompareTag("PlayerSkill3") && curHp > 0 && isHurt == false)
+        {
+            StartCoroutine(hurt(1));
+            StartCoroutine(knockBack());
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
+        }
+        if (coll.gameObject.CompareTag("PlayerSkill4") && curHp > 0 && isHurt == false)
+        {
+            StartCoroutine(hurt(1));
+            StartCoroutine(knockBack());
+            if (curHp <= 0)
+            {
+                StartCoroutine(die());
+            }
         }
 
     }
@@ -183,6 +212,7 @@ public class Enemy2 : MonoBehaviour
         sprite.color = Color.red;
         rigid.velocity = new Vector2(0, 2f);
         anim.SetTrigger("isDie");
+        Instantiate(coin, gameObject.transform.position, Quaternion.identity);
 
         yield return new WaitForSeconds(1f);
 

@@ -32,7 +32,8 @@ public class TalkManager : MonoBehaviour
         talkData.Add(1, new string[] { "안녕하세요." , "K를 눌러서 스킬창을 확인할 수 있습니다",
             "레벨업을 하면 스킬포인트를 얻을 수 있습니다", "레벨업을 해서 스킬을 찍어보세요"
             });
-        talkData.Add(2, new string[] {"사다리가 생겼다!"});
+        talkData.Add(2, new string[] {"I를 눌러서 물약을 구매할 수 있습니다", 
+        "구매한 물약은 키보드 Del와 End로 사용할 수 있습니다."});
     }
 
     public string getTalk(int id, int talkNum)

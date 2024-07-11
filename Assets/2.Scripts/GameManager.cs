@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public GameObject player;
+    Player playerr;
+    Animator playeranim;
 
     [SerializeField] GameObject talkPanel;
     [SerializeField] GameObject scanObject;
@@ -30,6 +32,11 @@ public class GameManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(this.gameObject);
+    }
+
+    private void Start()
+    {
+        playeranim = player.GetComponent<Animator>();
     }
 
     public Vector2 playerPos()

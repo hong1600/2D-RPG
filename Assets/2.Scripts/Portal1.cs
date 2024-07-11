@@ -7,9 +7,13 @@ using UnityEngine.SceneManagement;
 public class Portal1 : MonoBehaviour
 {
     CapsuleCollider2D cap;
+    GameObject player;
+    Rigidbody2D playerrigid;
 
     private void Awake()
     {
+        player = GameObject.Find("Player");
+        playerrigid = player.GetComponent<Rigidbody2D>();
         cap = GetComponent<CapsuleCollider2D>();
     }
 
@@ -17,7 +21,9 @@ public class Portal1 : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            SceneManager.LoadScene(2);
+            SceneLoad.LoadScene(2);
+            playerrigid.constraints = RigidbodyConstraints2D.FreezePositionX;
+            playerrigid.constraints = RigidbodyConstraints2D.FreezePositionY;
         }
     }
 }

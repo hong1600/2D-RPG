@@ -23,6 +23,7 @@ TagManager:
   - Lander
   - PlayerSkill2
   - PlayerSkill3
+  - PlayerSkill4
   layers:
   - Default
   - TransparentFX

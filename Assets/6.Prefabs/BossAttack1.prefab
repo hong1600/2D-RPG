@@ -122,6 +122,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  rotSpeed: 1
+  explosion: {fileID: 4193772461337742135, guid: cfbf04fe2e81c0d4ab6c41f04e4fb2a8, type: 3}
 --- !u!61 &6031711796966923844
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -193,4 +195,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0

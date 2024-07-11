@@ -55,7 +55,7 @@ public class UIManager : MonoBehaviour
     private void playerStat()
     {
         hpBar.value = player.Curhp / player.Maxhp;
-        mpBar.value = player.CurMp / player.MaxMp;
+        mpBar.value = player.Curmp / player.Maxmp;
         expBar.value = player.Curexp / player.Maxexp;
         level.text = player.Level.ToString();
         skillPoint.text = player.SkillPoint.ToString();
@@ -63,7 +63,7 @@ public class UIManager : MonoBehaviour
 
         
         curHpText.text = $"{player.Curhp} / {player.Maxhp}";
-        curMpText.text = $"{player.CurMp} / {player.MaxMp}";
+        curMpText.text = $"{player.Curmp} / {player.Maxmp}";
         curExpText.text = $"{player.Curexp} / {player.Maxexp}";
 
         if (player.hpup <= 0)

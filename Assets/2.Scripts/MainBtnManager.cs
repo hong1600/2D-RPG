@@ -9,10 +9,13 @@ using UnityEngine.UI;
 public class MainBtnManager : MonoBehaviour
 {
     [SerializeField] GameObject realExitPanel;
+    [SerializeField] GameObject dataPanel;
+    [SerializeField] GameObject namePanel;
+
 
     public void GameStartBtn()
     {
-        SceneManager.LoadScene(3);
+        SceneLoad.LoadScene(1);
     }
 
     public void GameExitBtn()
@@ -31,5 +34,15 @@ public class MainBtnManager : MonoBehaviour
     public void RealGameExitCancleBtn()
     {
         realExitPanel.SetActive(false);
+    }
+
+    public void dataPanelBtn()
+    {
+        dataPanel.SetActive(true);
+    }
+
+    public void namePanelBtn()
+    {
+        namePanel.SetActive(true);
     }
 }

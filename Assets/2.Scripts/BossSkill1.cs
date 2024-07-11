@@ -8,6 +8,11 @@ public class BossSkill1 : MonoBehaviour
     BoxCollider2D box;
 
     [SerializeField] float speed;
+    [SerializeField] float rotSpeed;
+    [SerializeField] GameObject explosion;
+
+    Vector3 dir;
+    Quaternion rotTarget;
 
     private void Awake()
     {
@@ -17,9 +22,7 @@ public class BossSkill1 : MonoBehaviour
 
     private void Update()
     {
-        transform.position =
-            Vector3.MoveTowards(transform.position,
-            GameManager.instance.playerPos(), speed * Time.deltaTime);
+        tracking();
 
         Destroy(gameObject, 2);
     }
@@ -29,6 +32,14 @@ public class BossSkill1 : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Destroy(gameObject);
+            Instantiate(explosion, gameObject.transform.position, Quaternion.identity);
         }
+    }
+
+    private void tracking()
+    {
+        transform.position =
+            Vector3.MoveTowards(transform.position,
+            GameManager.instance.playerPos(), speed * Time.deltaTime);
     }
 }
