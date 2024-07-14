@@ -54,33 +54,33 @@ public class UIManager : MonoBehaviour
 
     private void playerStat()
     {
-        hpBar.value = player.Curhp / player.Maxhp;
-        mpBar.value = player.Curmp / player.Maxmp;
-        expBar.value = player.Curexp / player.Maxexp;
-        level.text = player.Level.ToString();
-        skillPoint.text = player.SkillPoint.ToString();
-        curCoin.text = player.playerCoin.ToString();
+        hpBar.value = DataManager.instance.curPlayer.curHp / DataManager.instance.curPlayer.maxHp;
+        mpBar.value = DataManager.instance.curPlayer.curMp / DataManager.instance.curPlayer.maxMp;
+        expBar.value = DataManager.instance.curPlayer.curExp / DataManager.instance.curPlayer.maxExp;
+        level.text = DataManager.instance.curPlayer.level.ToString();
+        skillPoint.text = DataManager.instance.curPlayer.skillPoint.ToString();
+        curCoin.text = DataManager.instance.curPlayer.coin.ToString();
 
         
-        curHpText.text = $"{player.Curhp} / {player.Maxhp}";
-        curMpText.text = $"{player.Curmp} / {player.Maxmp}";
-        curExpText.text = $"{player.Curexp} / {player.Maxexp}";
+        curHpText.text = $"{DataManager.instance.curPlayer.curHp} / {DataManager.instance.curPlayer.maxHp}";
+        curMpText.text = $"{DataManager.instance.curPlayer.curMp} / {DataManager.instance.curPlayer.maxMp}";
+        curExpText.text = $"{DataManager.instance.curPlayer.curExp} / {DataManager.instance.curPlayer.maxExp}";
 
-        if (player.hpup <= 0)
+        if (DataManager.instance.curPlayer.hpUp <= 0)
         {
             Hpup.text = "0";
         }
         else
         {
-            Hpup.text = player.hpup.ToString();
+            Hpup.text = DataManager.instance.curPlayer.hpUp.ToString();
         }
-        if (player.mpup <= 0)
+        if (DataManager.instance.curPlayer.mpUp <= 0)
         {
             Mpup.text = "0";
         }
         else
         {
-            Mpup.text = player.mpup.ToString();
+            Mpup.text = DataManager.instance.curPlayer.mpUp.ToString();
         }
 
     }

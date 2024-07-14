@@ -5762,7 +5762,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &70702412
 PrefabInstance:
@@ -5950,6 +5950,7 @@ RectTransform:
   - {fileID: 1488535694}
   - {fileID: 1881311213}
   - {fileID: 1850915789}
+  - {fileID: 1281595838}
   m_Father: {fileID: 1206389529}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8894,7 +8895,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &563924948
 MonoBehaviour:
@@ -10241,7 +10242,7 @@ Transform:
   - {fileID: 1520996106}
   - {fileID: 621883790}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &712664098
 GameObject:
@@ -13202,7 +13203,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1144959827
 GameObject:
@@ -13722,7 +13723,7 @@ Transform:
   m_Children:
   - {fileID: 71186726}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1206389530
 MonoBehaviour:
@@ -14387,24 +14388,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3ba3aa5bf82de94886ba88809a5307d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  btnManager: {fileID: 1380795932}
   maxHp: 100
-  curHp: 50
+  curHp: 0
   maxMp: 100
-  curMp: 100
+  curMp: 0
   maxExp: 3
-  curExp: 2
-  curLevel: 1
-  curSkillPoint: 0
+  level: 0
+  curExp: 0
+  skillPoint: 0
   moveSpeed: 3.5
   jumpForce: 0.38
   dJumpForce: 0.38
   landerSpeed: 2
   knockBackPower: 20
+  fallSpeed: 0.6
+  walldistance: 0.11
+  wallJump: 2
+  coin: 0
+  hpup: 0
+  mpup: 0
   swordBox: {fileID: 543042471}
   fireBall: {fileID: 2258061844223909663, guid: 22852d9271b8dd549b4f02eed0ce2c57, type: 3}
   fireHand: {fileID: 3278276541256729152, guid: 9f0ac9d0eda7df4428a3e4b45d5a9771, type: 3}
   meteors: {fileID: 1059772008128684699, guid: 8bb236fdd3cd92b48af77413ff09e93f, type: 3}
+  inventoryPanel: {fileID: 1881311212}
+  diePanel: {fileID: 1850915785}
   fireBallTrs: {fileID: 427462028}
   fireHandTrs: {fileID: 197179919}
   meteorsTrs1: {fileID: 259870485}
@@ -14412,14 +14420,6 @@ MonoBehaviour:
   meteorsTrs3: {fileID: 127273560}
   meteorsTrs4: {fileID: 1876049335}
   hpSlider: {fileID: 374950712}
-  fallSpeed: 0.6
-  walldistance: 0.11
-  wallJump: 2
-  inventoryPanel: {fileID: 1881311212}
-  diePanel: {fileID: 1850915785}
-  coin: 0
-  hpup: 0
-  mpup: 0
   isGround: 0
   skill1on: 0
   skill2on: 0
@@ -14551,6 +14551,104 @@ CapsuleCollider2D:
   m_Offset: {x: -0.0056511564, y: -0.03172342}
   m_Size: {x: 0.12375196, y: 0.3274948}
   m_Direction: 0
+--- !u!1 &1281595834
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1281595838}
+  - component: {fileID: 1281595837}
+  - component: {fileID: 1281595836}
+  - component: {fileID: 1281595835}
+  m_Layer: 5
+  m_Name: Fade
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!95 &1281595835
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281595834}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1281595836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281595834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1281595837
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281595834}
+  m_CullTransparentMesh: 1
+--- !u!224 &1281595838
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281595834}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 71186726}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1282180831
 GameObject:
   m_ObjectHideFlags: 0
@@ -15654,7 +15752,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1380795935
 MonoBehaviour:
@@ -17253,7 +17351,7 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 0}
+  m_LookAt: {fileID: 1279264092}
   m_Follow: {fileID: 1279264092}
   m_Lens:
     FieldOfView: 21

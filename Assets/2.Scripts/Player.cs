@@ -27,28 +27,32 @@ public class Player : MonoBehaviour
     [SerializeField] float dJumpForce;
     [SerializeField] float landerSpeed;
     [SerializeField] float knockBackPower;
+    [SerializeField] float fallSpeed;
+    [SerializeField] float walldistance;
+    [SerializeField] float wallJump;
+    public int coin;
+    public int hpup = 0;
+    public int mpup = 0;
+
     [SerializeField] GameObject swordBox;
     [SerializeField] GameObject fireBall;
     [SerializeField] GameObject fireHand;
     [SerializeField] GameObject meteors;
+    [SerializeField] GameObject inventoryPanel;
+    [SerializeField] GameObject diePanel;
+    GameObject cutcam1;
+    GameObject cutcam2;
     GameObject scanObject;
+
     [SerializeField] Transform fireBallTrs;
     [SerializeField] Transform fireHandTrs;
     [SerializeField] Transform meteorsTrs1;
     [SerializeField] Transform meteorsTrs2;
     [SerializeField] Transform meteorsTrs3;
     [SerializeField] Transform meteorsTrs4;
-    [SerializeField] Slider hpSlider;
-    [SerializeField] float fallSpeed;
-    [SerializeField] float walldistance;
-    [SerializeField] float wallJump;
-    [SerializeField] GameObject inventoryPanel;
-    [SerializeField] GameObject diePanel;
-    Vector2 dirVec;
-    public int coin;
-    public int hpup = 0;
-    public int mpup = 0;
 
+    [SerializeField] Slider hpSlider;
+    Vector2 dirVec;
 
     public bool isGround;
     bool isMove;
@@ -67,6 +71,8 @@ public class Player : MonoBehaviour
     public bool skill1on;
     public bool skill2on;
     public bool skill3on;
+
+    Transform curpos;
 
     public float Maxhp
     { get { return maxHp; } }
@@ -89,8 +95,6 @@ public class Player : MonoBehaviour
     public bool isdie
     { get { return isDie; } set { isDie = value; } }
 
-
-
     private void Awake()
     {
         if (instance == null)
@@ -112,13 +116,16 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        name = DataManager.instance.curPlayer.name;
-        level = DataManager.instance.curPlayer.level;
-        curExp = DataManager.instance.curPlayer.curExp;
-        curHp = DataManager.instance.curPlayer.curHp;
-        curMp = DataManager.instance.curPlayer.curMp;
-        skillPoint = DataManager.instance.curPlayer.skillPoint;
-        coin = DataManager.instance.curPlayer.coin;
+        name += DataManager.instance.curPlayer.name;
+        level += DataManager.instance.curPlayer.level;
+        curExp += DataManager.instance.curPlayer.curExp;
+        curHp += DataManager.instance.curPlayer.curHp;
+        curMp += DataManager.instance.curPlayer.curMp;
+        skillPoint += DataManager.instance.curPlayer.skillPoint;
+        coin += DataManager.instance.curPlayer.coin;
+        hpup += DataManager.instance.curPlayer.hpUp;
+        mpup += DataManager.instance.curPlayer.mpUp;
+        curpos = DataManager.instance.curPlayer.curPos;
     }
 
     private void FixedUpdate()
@@ -252,19 +259,19 @@ public class Player : MonoBehaviour
             && isAttack == false && curMp >= 5f && skill1on == true)    
         {
             StartCoroutine(skill1());
-            curMp -= 5f;
+            DataManager.instance.curPlayer.curMp -= 10f;
         }
         else if (Input.GetKeyDown(KeyCode.S) && isGround == true
         && isAttack == false && curMp >= 10f && skill2on == true)
         {
             StartCoroutine(skill2());
-            curMp -= 10f;
+            DataManager.instance.curPlayer.curMp -= 5f;
         }
         else if (Input.GetKeyDown(KeyCode.D) && isGround == true
         && isAttack == false && curMp >= 20f && skill3on == true)
         {
             StartCoroutine(skill3());
-            curMp -= 20f;
+            DataManager.instance.curPlayer.curMp -= 20f;
         }
     }
 
@@ -371,12 +378,12 @@ public class Player : MonoBehaviour
 
     private void levelUp()
     {
-        if( maxExp <= curExp ) 
+        if (DataManager.instance.curPlayer.maxExp <= DataManager.instance.curPlayer.curExp) 
         {
             DataManager.instance.curPlayer.level++;
-            curExp = 0;
-            maxExp += 1;
-            skillPoint += 1;
+            DataManager.instance.curPlayer.curExp = 0;
+            DataManager.instance.curPlayer.skillPoint += 1;
+            DataManager.instance.curPlayer.maxExp += 2f;
         }
     }
 
@@ -413,32 +420,32 @@ public class Player : MonoBehaviour
             inventoryon = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Delete) && hpup >= 1)
+        if (Input.GetKeyDown(KeyCode.Delete) && DataManager.instance.curPlayer.hpUp >= 1)
         {
-            if (curHp >= 50)
+            if (DataManager.instance.curPlayer.curHp >= 80)
             {
-                curHp = maxHp;
+                DataManager.instance.curPlayer.curHp = DataManager.instance.curPlayer.maxHp;
             }
             else
             {
-                curHp += 50f;
+                DataManager.instance.curPlayer.curHp += 20f;
             }
 
-            hpup -= 1;
+            DataManager.instance.curPlayer.hpUp -= 1;
         }
 
-        if (Input.GetKeyDown(KeyCode.End) && mpup >= 1)
+        if (Input.GetKeyDown(KeyCode.End) && DataManager.instance.curPlayer.mpUp >= 1)
         {
-            if (curMp >= 50)
+            if (DataManager.instance.curPlayer.curMp >= 80)
             {
-                curMp = maxMp;
+                DataManager.instance.curPlayer.curMp = DataManager.instance.curPlayer.maxMp;
             }
             else
             {
-                curMp += 50f;
+                DataManager.instance.curPlayer.curMp += 20f;
             }
 
-            mpup -= 1;
+            DataManager.instance.curPlayer.mpUp -= 1;
         }
     }
 
@@ -522,7 +529,7 @@ public class Player : MonoBehaviour
         {
             yield break;
         }
-        curHp -= damage;
+        DataManager.instance.curPlayer.curHp -= damage;
         isHurt = true;
         anim.SetTrigger("isHurt");
         isAttack = true;

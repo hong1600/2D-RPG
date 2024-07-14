@@ -51,10 +51,10 @@ public class GameBtnManager : MonoBehaviour
 
     public void skill1Btn()
     {
-        if (Player.instance.SkillPoint > 0)
+        if (DataManager.instance.curPlayer.skillPoint > 0)
         {
             skill1Img.color = new Color(1, 1, 1, 1);
-            Player.instance.skillPoint -= 1;
+            DataManager.instance.curPlayer.skillPoint -= 1;
             skillAImg.SetActive(true);
             Player.instance.skill1on = true;
         }
@@ -62,10 +62,10 @@ public class GameBtnManager : MonoBehaviour
 
     public void skill2Btn()
     {
-        if (Player.instance.SkillPoint > 0)
+        if (DataManager.instance.curPlayer.skillPoint > 0)
         {
             skill2Img.color = new Color(1, 1, 1, 1);
-            Player.instance.skillPoint -= 1;
+            DataManager.instance.curPlayer.skillPoint -= 1;
             skillSImg.SetActive(true);
             Player.instance.skill2on = true;
         }
@@ -73,12 +73,12 @@ public class GameBtnManager : MonoBehaviour
 
     public void skill3Btn()
     {
-        if (Player.instance.SkillPoint > 0)
+        if (DataManager.instance.curPlayer.skillPoint > 0)
         {
             skill3Img1.color = new Color(1, 1, 1, 1);
             skill3Img2.color = new Color(1, 1, 1, 1);
             skill3Img3.color = new Color(1, 1, 1, 1);
-            Player.instance.skillPoint -= 1;
+            DataManager.instance.curPlayer.skillPoint -= 1;
             skillDImg.SetActive(true);
             Player.instance.skill3on = true;
         }
@@ -109,6 +109,7 @@ public class GameBtnManager : MonoBehaviour
     public void GameExitBtn()
     {
         SceneManager.LoadScene(0);
+        DataManager.instance.curPlayer.curPos.position = GameManager.instance.playerPos();
         realExitPanel.SetActive(false);
         playerrigid.constraints = RigidbodyConstraints2D.FreezePositionX;
         playerrigid.constraints = RigidbodyConstraints2D.FreezePositionY;
@@ -117,27 +118,27 @@ public class GameBtnManager : MonoBehaviour
 
     public void hpBtn()
     {
-        if(Player.instance.coin >= 5) 
+        if(DataManager.instance.curPlayer.coin >= 5) 
         {
-            Player.instance.coin -= 5;
-            Player.instance.hpup += 1;
+            DataManager.instance.curPlayer.coin -= 5;
+            DataManager.instance.curPlayer.hpUp += 1;
         }
     }
 
     public void mpBtn()
     {
-        if (Player.instance.coin >= 5)
+        if (DataManager.instance.curPlayer.coin >= 5)
         {
-            Player.instance.coin -= 5;
-            Player.instance.mpup += 1;
+            DataManager.instance.curPlayer.coin -= 5;
+            DataManager.instance.curPlayer.mpUp += 1;
         }
     }
 
     public void dieBtn()
     {
         Player.instance.isdie = false;
-        Player.instance.Curhp = Player.instance.Maxhp;
-        Player.instance.Curmp = Player.instance.Maxmp;
+        DataManager.instance.curPlayer.curHp = DataManager.instance.curPlayer.maxHp;
+        DataManager.instance.curPlayer.curMp = DataManager.instance.curPlayer.maxMp;
         playeranim.Rebind();
         diePanel.SetActive(false);
     }

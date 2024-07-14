@@ -208,7 +208,7 @@ public class Enemy2 : MonoBehaviour
 
     IEnumerator die()
     {
-        Player.instance.curExp += 5;
+        DataManager.instance.curPlayer.curExp += 5;
         sprite.color = Color.red;
         rigid.velocity = new Vector2(0, 2f);
         anim.SetTrigger("isDie");

@@ -191,7 +191,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator die()
     {
-        Player.instance.curExp += 1;
+        DataManager.instance.curPlayer.curExp += 1;
         EnemySpawn.instance.enemyCount--;
         sprite.color = Color.red;
         rigid.velocity = new Vector2(0, 2f);
