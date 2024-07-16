@@ -8,8 +8,6 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
 
-    [SerializeField] Player player;
-
     [SerializeField] Slider hpBar;
     [SerializeField] Slider mpBar;
     [SerializeField] Slider expBar;
@@ -28,6 +26,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI curCoin;
     [SerializeField] TextMeshProUGUI Hpup;
     [SerializeField] TextMeshProUGUI Mpup;
+
+    [SerializeField] GameObject bossHpBar;
+    [SerializeField] TextMeshProUGUI BossHpText;
  
     bool staton;
     bool SkillA;

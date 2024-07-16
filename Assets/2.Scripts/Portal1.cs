@@ -12,7 +12,7 @@ public class Portal1 : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.Find("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
         playerrigid = player.GetComponent<Rigidbody2D>();
         cap = GetComponent<CapsuleCollider2D>();
     }
@@ -21,9 +21,8 @@ public class Portal1 : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            playerrigid.simulated = false;
             SceneLoad.LoadScene(2);
-            playerrigid.constraints = RigidbodyConstraints2D.FreezePositionX;
-            playerrigid.constraints = RigidbodyConstraints2D.FreezePositionY;
         }
     }
 }

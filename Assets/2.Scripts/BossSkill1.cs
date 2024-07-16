@@ -40,6 +40,6 @@ public class BossSkill1 : MonoBehaviour
     {
         transform.position =
             Vector3.MoveTowards(transform.position,
-            GameManager.instance.playerPos(), speed * Time.deltaTime);
+            Player.instance.transform.position, speed * Time.deltaTime);
     }
 }

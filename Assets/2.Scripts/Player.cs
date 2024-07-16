@@ -51,7 +51,6 @@ public class Player : MonoBehaviour
     [SerializeField] Transform meteorsTrs3;
     [SerializeField] Transform meteorsTrs4;
 
-    [SerializeField] Slider hpSlider;
     Vector2 dirVec;
 
     public bool isGround;
@@ -125,7 +124,7 @@ public class Player : MonoBehaviour
         coin += DataManager.instance.curPlayer.coin;
         hpup += DataManager.instance.curPlayer.hpUp;
         mpup += DataManager.instance.curPlayer.mpUp;
-        curpos = DataManager.instance.curPlayer.curPos;
+        gameObject.transform.position = DataManager.instance.curPlayer.curPos;
     }
 
     private void FixedUpdate()
@@ -256,19 +255,19 @@ public class Player : MonoBehaviour
             StartCoroutine(sword());
         }
         else if (Input.GetKeyDown(KeyCode.A) && isGround == true 
-            && isAttack == false && curMp >= 5f && skill1on == true)    
+            && isAttack == false && DataManager.instance.curPlayer.curMp >= 5f && skill1on == true)    
         {
             StartCoroutine(skill1());
-            DataManager.instance.curPlayer.curMp -= 10f;
-        }
-        else if (Input.GetKeyDown(KeyCode.S) && isGround == true
-        && isAttack == false && curMp >= 10f && skill2on == true)
-        {
-            StartCoroutine(skill2());
             DataManager.instance.curPlayer.curMp -= 5f;
         }
+        else if (Input.GetKeyDown(KeyCode.S) && isGround == true
+        && isAttack == false && DataManager.instance.curPlayer.curMp >= 10f && skill2on == true)
+        {
+            StartCoroutine(skill2());
+            DataManager.instance.curPlayer.curMp -= 10f;
+        }
         else if (Input.GetKeyDown(KeyCode.D) && isGround == true
-        && isAttack == false && curMp >= 20f && skill3on == true)
+        && isAttack == false && DataManager.instance.curPlayer.curMp >= 20f && skill3on == true)
         {
             StartCoroutine(skill3());
             DataManager.instance.curPlayer.curMp -= 20f;
@@ -488,7 +487,14 @@ public class Player : MonoBehaviour
         if (coll.gameObject.CompareTag("BossAttack1"))
         {
             StartCoroutine(hurt(10));
+            StartCoroutine(knockBack(coll.gameObject));
         }
+        if (coll.gameObject.CompareTag("BossAttack2"))
+        {
+            StartCoroutine(hurt(20));
+            StartCoroutine(knockBack(coll.gameObject));
+        }
+
 
         if (coll.gameObject.CompareTag("Lander"))
         {
@@ -536,11 +542,13 @@ public class Player : MonoBehaviour
 
         yield return new WaitForSeconds(0.3f);
 
-        if (curHp <= 0)
+        if (DataManager.instance.curPlayer.curHp <= 0)
         {
             isDie = true;
             anim.SetTrigger("isDie");
             diePanel.SetActive(true);
+            cap.enabled = false;
+            rigid.simulated = false;
         }
 
         isHurt = false;

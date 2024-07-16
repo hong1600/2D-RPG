@@ -24,6 +24,7 @@ TagManager:
   - PlayerSkill2
   - PlayerSkill3
   - PlayerSkill4
+  - BossHp
   layers:
   - Default
   - TransparentFX

@@ -19,7 +19,7 @@ public class PlayerSkill3 : MonoBehaviour
 
     private void Start()
     {
-        if (GameManager.instance.playerScale().x < 0)
+        if (Player.instance.transform.localScale.x < 0)
         {
             gameObject.transform.rotation = Quaternion.Euler(0, -180, 0);
             rigid.AddForce(new Vector3(-1, -1, 0) * speed, ForceMode2D.Impulse);

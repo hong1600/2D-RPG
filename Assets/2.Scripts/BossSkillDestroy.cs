@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class PlayerSkill2 : MonoBehaviour
+public class BossSkillDestroy : MonoBehaviour
 {
     BoxCollider2D box;
 
@@ -13,14 +14,8 @@ public class PlayerSkill2 : MonoBehaviour
 
     private void Start()
     {
-        if (Player.instance.transform.localScale.x < 0)
-        {
-            gameObject.transform.rotation = Quaternion.Euler(0, -180f, 0);
-        }
-
-        Invoke("oncoll", 1f);
-
-        Destroy(gameObject, 2.3f);
+        Invoke("oncoll", 0.5f);
+        Destroy(gameObject, 1);
     }
 
     private void oncoll()

@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public GameObject player;
+    GameObject player;
     Player playerr;
     Animator playeranim;
 
@@ -36,17 +36,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         playeranim = player.GetComponent<Animator>();
-    }
-
-    public Vector2 playerPos()
-    {
-        return player.transform.position;
-    }
-
-    public Vector3 playerScale()
-    {
-        return player.transform.localScale;
     }
 
     public void Action(GameObject scanObj)

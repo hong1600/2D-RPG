@@ -18,7 +18,7 @@ public class SceneLoad : MonoBehaviour
     private void Start()
     {
         StartCoroutine(loadScene());
-        player = GameObject.Find("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
         {
             return;
@@ -66,8 +66,7 @@ public class SceneLoad : MonoBehaviour
                 operation.allowSceneActivation = true;
                 if (player != null)
                 {
-                    playerrigid.constraints = RigidbodyConstraints2D.None;
-                    playerrigid.constraints = RigidbodyConstraints2D.FreezeRotation;
+                    playerrigid.simulated = true;
                 }
             }
         }

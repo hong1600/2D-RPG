@@ -1,15 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using TMPro;
 using UnityEngine;
+using TMPro;
 using UnityEngine.SceneManagement;
+using System.IO;
+using System;
 
 public class SeletSlot : MonoBehaviour
 {
     [SerializeField] GameObject slot;
     [SerializeField] TextMeshProUGUI[] slotText;
-    [SerializeField] TextMeshProUGUI newPlayerName;
+    [SerializeField] TextMeshProUGUI[] dateText;
+    [SerializeField] TMP_InputField newPlayerName;
+
+    string curTime;
 
     bool[] saveFile = new bool[3];
 
@@ -23,13 +27,15 @@ public class SeletSlot : MonoBehaviour
                 DataManager.instance.curSlot = i;
                 DataManager.instance.loadData();
                 slotText[i].text = DataManager.instance.curPlayer.name;
+                dateText[i].text = DataManager.instance.curPlayer.date;
             }
             else
             {
                 slotText[i].text = "비어있음";
             }
         }
-        DataManager.instance.clearData();
+
+        //DataManager.instance.clearData();
     }
 
     public void slotF(int num)
@@ -39,7 +45,7 @@ public class SeletSlot : MonoBehaviour
         if (saveFile[num])
         {
             DataManager.instance.loadData();
-            startGame();
+            goGame();
         }
         else
         {
@@ -52,14 +58,17 @@ public class SeletSlot : MonoBehaviour
         slot.gameObject.SetActive(true);
     }
 
-    public void startGame()
+    public void goGame()
     {
         if (!saveFile[DataManager.instance.curSlot])
         {
-            Player.instance.transform.position = DataManager.instance.curPlayer.curPos.position;
             DataManager.instance.curPlayer.name = newPlayerName.text;
+            curTime = DateTime.Now.ToString("g");
+            DataManager.instance.curPlayer.date = curTime;
             DataManager.instance.saveData();
         }
-        SceneLoad.LoadScene(1);
+        int curScene = DataManager.instance.curPlayer.curScene;
+
+        SceneLoad.LoadScene(curScene);
     }
 }

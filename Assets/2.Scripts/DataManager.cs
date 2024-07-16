@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class PlayerData
 {
-    public string name;
+    public string name = "";
+    public string date = "";
     public int level = 1;
     public float curExp = 0;
     public float maxExp = 2;
@@ -18,8 +19,8 @@ public class PlayerData
     public int coin = 0;
     public int hpUp = 0;
     public int mpUp = 0;
-
-    public Transform curPos;
+    public Vector2 curPos = new Vector2(-14.1f, -4.6f);
+    public int curScene = 1;
 }
 
 public class DataManager : MonoBehaviour

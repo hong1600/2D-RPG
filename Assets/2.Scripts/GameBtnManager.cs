@@ -28,6 +28,7 @@ public class GameBtnManager : MonoBehaviour
 
     Animator playeranim;
     Rigidbody2D playerrigid;
+    CapsuleCollider2D playercap;
 
     private void Awake()
     {
@@ -47,6 +48,7 @@ public class GameBtnManager : MonoBehaviour
     {
         playeranim = Player.instance.GetComponent<Animator>();
         playerrigid = Player.instance.GetComponent<Rigidbody2D>();
+        playercap = Player.instance.GetComponent<CapsuleCollider2D>();
     }
 
     public void skill1Btn()
@@ -109,10 +111,11 @@ public class GameBtnManager : MonoBehaviour
     public void GameExitBtn()
     {
         SceneManager.LoadScene(0);
-        DataManager.instance.curPlayer.curPos.position = GameManager.instance.playerPos();
         realExitPanel.SetActive(false);
-        playerrigid.constraints = RigidbodyConstraints2D.FreezePositionX;
-        playerrigid.constraints = RigidbodyConstraints2D.FreezePositionY;
+        playerrigid.simulated = false;
+        DataManager.instance.curPlayer.curPos =
+            new Vector2(Player.instance.transform.position.x, Player.instance.transform.position.y);
+        DataManager.instance.curPlayer.curScene = SceneManager.GetActiveScene().buildIndex;
         DataManager.instance.saveData();
     }
 
@@ -141,5 +144,7 @@ public class GameBtnManager : MonoBehaviour
         DataManager.instance.curPlayer.curMp = DataManager.instance.curPlayer.maxMp;
         playeranim.Rebind();
         diePanel.SetActive(false);
+        playerrigid.simulated = true;
+        playercap.enabled = true;
     }
 }

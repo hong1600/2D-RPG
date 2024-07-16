@@ -59,7 +59,7 @@ public class Enemy2 : MonoBehaviour
 
     private void turn() 
     {
-        if (GameManager.instance.playerPos().x < transform.position.x)
+        if (Player.instance.transform.position.x < transform.position.x)
         {
             dirVec = Vector2.left;
         }
@@ -194,11 +194,11 @@ public class Enemy2 : MonoBehaviour
 
     IEnumerator knockBack()
     {
-        if (gameObject.transform.position.x > GameManager.instance.playerPos().x)
+        if (gameObject.transform.position.x > Player.instance.transform.position.x)
         {
             rigid.velocity = new Vector2(1, 1f);
         }
-        else if (gameObject.transform.position.x < GameManager.instance.playerPos().x)
+        else if (gameObject.transform.position.x < Player.instance.transform.position.x)
         {
             rigid.velocity = new Vector2(-1, 1f);
         }

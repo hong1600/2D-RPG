@@ -15,17 +15,29 @@ public class Boss : MonoBehaviour
     [SerializeField] bool tracking;
     [SerializeField] float speed;
     [SerializeField] float curHp;
+    [SerializeField] float maxHp;
     [SerializeField] float knockDistance;
     bool isHurt;
     float moveDir;
     int nextMove;
     bool nTracking;
-    bool attackReady;
+    [SerializeField] bool attackReady;
     bool isAttack;
     float coolTime;
+    bool hpBar = false;
 
     [SerializeField] GameObject bossSkill1;
     [SerializeField] Transform bossSkill1Trs;
+    [SerializeField] GameObject bossSkill2;
+
+    public float Curhp
+    { get { return curHp; } }
+    public float Maxhp
+    { get { return maxHp; } }
+    public bool Hpbar 
+    { get { return hpBar; } }
+
+
 
     private void Awake()
     {
@@ -44,10 +56,6 @@ public class Boss : MonoBehaviour
         turn();
         checkGround();
         cooltime();
-    }
-
-    private void FixedUpdate()
-    {
     }
 
     private void move()
@@ -93,12 +101,12 @@ public class Boss : MonoBehaviour
 
     private void checkPlayer()
     {
-        if (GameManager.instance.player.transform.position.x < transform.position.x)
+        if (Player.instance.transform.position.x < transform.position.x)
         {
             dirVec = Vector2.left;
             moveDir = -1f;
         }
-        else if (GameManager.instance.player.transform.position.x > transform.position.x)
+        else if (Player.instance.transform.position.x > transform.position.x)
         {
             dirVec = Vector2.right;
             moveDir = 1f;
@@ -106,19 +114,20 @@ public class Boss : MonoBehaviour
         else if (GameManager.instance == null)
         { return; }
 
-        if (Physics2D.Raycast(transform.position, dirVec, distance, LayerMask.GetMask("Player"))
-            && nTracking == false)
+        if (Physics2D.BoxCast(transform.position, new Vector2(5, 3), 
+            0, new Vector2(0,0), LayerMask.GetMask("Player"))
+            && nTracking )
         {
+            hpBar = true;
             tracking = true;
             attackReady = true;
         }
-        else
+        else if (Physics2D.BoxCast(transform.position, new Vector2(5, 3),
+            0, new Vector2(0, 0), LayerMask.GetMask("Player")) == false)
         {
             tracking = false;
             attackReady = false;
         }
-
-        Debug.DrawRay(transform.position, dirVec, Color.red);
     }
 
 
@@ -148,23 +157,24 @@ public class Boss : MonoBehaviour
         if (coolTime <= 0 && attackReady == true)
         {
             attack();
-            coolTime = 3f;
+            coolTime = 4f;
         }
-
-        coolTime -= Time.deltaTime;
+        else if(coolTime > 0) 
+        {
+            coolTime -= Time.deltaTime;
+        }
     }
 
 
     private void attack()
     {
-        //int rand = Random.Range(0, 2);
-        int rand = 0;
+        int rand = Random.Range(0, 3);
 
-        if (rand == 0)
+        if (rand == 0 || rand == 1)
         {
             StartCoroutine(attack1());
         }
-        else if (rand == 1)
+        else if (rand == 2)
         {
             StartCoroutine(attack2());
         }
@@ -191,8 +201,21 @@ public class Boss : MonoBehaviour
 
     IEnumerator attack2()
     {
+        anim.SetBool("isAttack1", true);
+        isAttack = true;
 
-        yield return null;
+        yield return new WaitForSeconds(1f);
+
+        if (dirVec == Vector2.right)
+        {
+            Instantiate(bossSkill2, bossSkill1Trs.position, Quaternion.identity);
+        }
+        else if (dirVec == Vector2.left)
+        {
+            Instantiate(bossSkill2, bossSkill1Trs.position, Quaternion.Euler(0, 180, 0));
+        }
+        anim.SetBool("isAttack1", false);
+        isAttack = false;
     }
 
     private void OnTriggerEnter2D(Collider2D coll)
@@ -218,7 +241,7 @@ public class Boss : MonoBehaviour
         }
         if (coll.gameObject.CompareTag("PlayerSkill2") && curHp > 0 && isHurt == false)
         {
-            StartCoroutine(hurt(1));
+            StartCoroutine(hurt(5));
             StartCoroutine(knockBack(coll.gameObject));
             if (curHp <= 0)
             {
@@ -227,22 +250,22 @@ public class Boss : MonoBehaviour
         }
         if (coll.gameObject.CompareTag("PlayerSkill3") && curHp > 0 && isHurt == false)
         {
-            StartCoroutine(hurt(1));
+            StartCoroutine(hurt(10));
             StartCoroutine(knockBack(coll.gameObject));
             if (curHp <= 0)
             {
                 StartCoroutine(die());
             }
         }
-        if (coll.gameObject.CompareTag("PlayerSkill4") && curHp > 0 && isHurt == false)
-        {
-            StartCoroutine(hurt(1));
-            StartCoroutine(knockBack(coll.gameObject));
-            if (curHp <= 0)
-            {
-                StartCoroutine(die());
-            }
-        }
+        //if (coll.gameObject.CompareTag("PlayerSkill4") && curHp > 0 && isHurt == false)
+        //{
+        //    StartCoroutine(hurt(1));
+        //    StartCoroutine(knockBack(coll.gameObject));
+        //    if (curHp <= 0)
+        //    {
+        //        StartCoroutine(die());
+        //    }
+        //}
     }
 
     IEnumerator hurt(int _damage)

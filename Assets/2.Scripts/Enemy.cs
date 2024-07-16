@@ -59,7 +59,7 @@ public class Enemy : MonoBehaviour
         else if (tracking == true && isHurt == false) 
         {
             rigid.velocity = 
-                new Vector2(GameManager.instance.playerPos().normalized.x * speed, rigid.velocity.y);
+                new Vector2(Player.instance.transform.position.normalized.x * speed, rigid.velocity.y);
         }
     }
 
@@ -156,7 +156,6 @@ public class Enemy : MonoBehaviour
             {
                 StartCoroutine(die());
             }
-
         }
     }
 
@@ -177,11 +176,11 @@ public class Enemy : MonoBehaviour
 
     IEnumerator knockBack()
     {
-        if (gameObject.transform.position.x > GameManager.instance.playerPos().x)
+        if (gameObject.transform.position.x > Player.instance.transform.position.x)
         {
             rigid.velocity = new Vector2(kDistance, 1f);
         }
-        else if (gameObject.transform.position.x < GameManager.instance.playerPos().x)
+        else if (gameObject.transform.position.x < Player.instance.transform.position.x)
         {
             rigid.velocity = new Vector2(-kDistance, 1f);
         }

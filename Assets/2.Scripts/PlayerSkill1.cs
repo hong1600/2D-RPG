@@ -17,11 +17,11 @@ public class PlayerSkill1 : MonoBehaviour
         circle = GetComponent<CircleCollider2D>();
         sprite = GetComponent<SpriteRenderer>();
 
-        if (GameManager.instance.playerScale().x > 0)
+        if (Player.instance.transform.localScale.x > 0)
         {
             rigid.velocity = new Vector2(fireSpeed, rigid.velocity.y);
         }
-        else if (GameManager.instance.playerScale().x < 0)
+        else if (Player.instance.transform.localScale.x < 0)
         {
             rigid.velocity = new Vector2(-fireSpeed, rigid.velocity.y);
             gameObject.transform.rotation = Quaternion.Euler(0, 0, -40);

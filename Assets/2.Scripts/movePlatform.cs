@@ -49,7 +49,7 @@ public class movePlatform : MonoBehaviour
         if (collision.collider.CompareTag("Player"))
         {
             collision.transform.SetParent(null);
+            DontDestroyOnLoad(collision.gameObject);
         }
-
     }
 }
