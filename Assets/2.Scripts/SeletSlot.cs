@@ -35,7 +35,7 @@ public class SeletSlot : MonoBehaviour
             }
         }
 
-        //DataManager.instance.clearData();
+        DataManager.instance.clearData();
     }
 
     public void slotF(int num)

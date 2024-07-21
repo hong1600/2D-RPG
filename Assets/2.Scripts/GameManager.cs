@@ -37,7 +37,11 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        playeranim = player.GetComponent<Animator>();
+
+        if(player != null)
+        {
+            playeranim = player.GetComponent<Animator>();
+        }
     }
 
     public void Action(GameObject scanObj)

@@ -21,6 +21,8 @@ public class PlayerData
     public int mpUp = 0;
     public Vector2 curPos = new Vector2(-14.1f, -4.6f);
     public int curScene = 1;
+    public float sfxVolume = 1;
+    public float bgmVolume = 1;
 }
 
 public class DataManager : MonoBehaviour

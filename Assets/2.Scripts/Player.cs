@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
     [SerializeField] Transform meteorsTrs2;
     [SerializeField] Transform meteorsTrs3;
     [SerializeField] Transform meteorsTrs4;
-
+    Transform curpos;
     Vector2 dirVec;
 
     public bool isGround;
@@ -71,7 +71,10 @@ public class Player : MonoBehaviour
     public bool skill2on;
     public bool skill3on;
 
-    Transform curpos;
+
+    [SerializeField] AudioClip attackclip;
+    [SerializeField] AudioClip coinClip;
+    [SerializeField] AudioClip dieClip;
 
     public float Maxhp
     { get { return maxHp; } }
@@ -284,9 +287,14 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
         swordBox.SetActive(true);
+        AudioManager.instance.sfxPlayer("Attack", attackclip);
 
-        yield return new WaitForSeconds(0.7f);
-        
+        yield return new WaitForSeconds(0.3f);
+
+        AudioManager.instance.sfxPlayer("Attack", attackclip);
+
+        yield return new WaitForSeconds(0.4f);
+
         swordBox.SetActive(false);
         anim.SetBool("isSword", false);
         isAttack = false;
@@ -522,9 +530,21 @@ public class Player : MonoBehaviour
             StartCoroutine(hurt(10));
             StartCoroutine(knockBack(coll.gameObject));
         }
+
         if (coll.collider.CompareTag("Coin"))
         {
+            AudioManager.instance.sfxPlayer("Coin", coinClip);
             DataManager.instance.curPlayer.coin += 10;
+            Destroy(coll.gameObject);
+        }
+        if (coll.collider.CompareTag("HpPotion"))
+        {
+            DataManager.instance.curPlayer.hpUp += 1;
+            Destroy(coll.gameObject);
+        }
+        if (coll.collider.CompareTag("MpPotion"))
+        {
+            DataManager.instance.curPlayer.mpUp += 1;
             Destroy(coll.gameObject);
         }
     }
@@ -544,6 +564,7 @@ public class Player : MonoBehaviour
 
         if (DataManager.instance.curPlayer.curHp <= 0)
         {
+            AudioManager.instance.sfxPlayer("Die", dieClip);
             isDie = true;
             anim.SetTrigger("isDie");
             diePanel.SetActive(true);

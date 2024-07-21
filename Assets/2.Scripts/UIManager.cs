@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] Slider hpBar;
     [SerializeField] Slider mpBar;
     [SerializeField] Slider expBar;
+    [SerializeField] Slider bgmVolume;
+    [SerializeField] Slider sfxVolume;
     [SerializeField] TextMeshProUGUI level;
     [SerializeField] TextMeshProUGUI skillPoint;
 
@@ -83,7 +85,6 @@ public class UIManager : MonoBehaviour
         {
             Mpup.text = DataManager.instance.curPlayer.mpUp.ToString();
         }
-
     }
 
     private void statPanelOn()
@@ -99,5 +100,11 @@ public class UIManager : MonoBehaviour
             statPanel.SetActive(false);
             staton = false;
         }
+    }
+
+    private void setting()
+    {
+        DataManager.instance.curPlayer.bgmVolume = bgmVolume.value;
+        DataManager.instance.curPlayer.sfxVolume = sfxVolume.value;
     }
 }

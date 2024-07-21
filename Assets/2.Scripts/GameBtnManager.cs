@@ -23,6 +23,7 @@ public class GameBtnManager : MonoBehaviour
     [SerializeField] GameObject realExitPanel;
 
     [SerializeField] GameObject menuPanel;
+    [SerializeField] GameObject optionPanel;
 
     [SerializeField] GameObject diePanel;
 
@@ -147,4 +148,16 @@ public class GameBtnManager : MonoBehaviour
         playerrigid.simulated = true;
         playercap.enabled = true;
     }
+
+    public void OptionOnBtn()
+    {
+        optionPanel.SetActive(true);
+        menuPanel.SetActive(false);
+    }
+    public void OptionOffBtn()
+    {
+        optionPanel.SetActive(false);
+    }
+
+
 }

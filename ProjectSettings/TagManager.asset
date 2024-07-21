@@ -25,6 +25,8 @@ TagManager:
   - PlayerSkill3
   - PlayerSkill4
   - BossHp
+  - HpPotion
+  - MpPotion
   layers:
   - Default
   - TransparentFX
@@ -37,7 +39,7 @@ TagManager:
   - Enemy
   - Wall
   - Quest
-  - Tree
+  - 
   - Coin
   - Object
   - Boss

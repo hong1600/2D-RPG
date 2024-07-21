@@ -18,7 +18,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] float kDistance;
     [SerializeField] GameObject coin;
     [SerializeField] GameObject tree;
-    [SerializeField] float exp;
+    [SerializeField] GameObject hpPotion;
+    [SerializeField] GameObject mpPotion;
     int nextMove;
     bool tracking = false;
     bool nTracking;
@@ -195,7 +196,29 @@ public class Enemy : MonoBehaviour
         sprite.color = Color.red;
         rigid.velocity = new Vector2(0, 2f);
         box.enabled = false;
-        Instantiate(coin, gameObject.transform.position, Quaternion.identity);
+
+        int rand = Random.Range(0, 4);
+
+        if (rand == 0)
+        {
+            Instantiate(coin, gameObject.transform.position, Quaternion.identity);
+            Instantiate(hpPotion, gameObject.transform.position, Quaternion.identity);
+            Instantiate(mpPotion, gameObject.transform.position, Quaternion.identity);
+        }
+        else if (rand == 1)
+        {
+            Instantiate(coin, gameObject.transform.position, Quaternion.identity);
+            Instantiate(hpPotion, gameObject.transform.position, Quaternion.identity);
+        }
+        else if (rand == 2)
+        {
+            Instantiate(coin, gameObject.transform.position, Quaternion.identity);
+            Instantiate(mpPotion, gameObject.transform.position, Quaternion.identity);
+        }
+        else if (rand == 3)
+        {
+            Instantiate(coin, gameObject.transform.position, Quaternion.identity);
+        }
 
         yield return new WaitForSeconds(1.5f);
 
