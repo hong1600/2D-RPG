@@ -42,7 +42,7 @@ public class SeletSlot : MonoBehaviour
     {
         DataManager.instance.curSlot = num;
 
-        if (saveFile[num])
+        if (saveFile[num] == true)
         {
             DataManager.instance.loadData();
             goGame();
@@ -60,13 +60,14 @@ public class SeletSlot : MonoBehaviour
 
     public void goGame()
     {
-        if (!saveFile[DataManager.instance.curSlot])
+        if (saveFile[DataManager.instance.curSlot] == false)
         {
             DataManager.instance.curPlayer.name = newPlayerName.text;
             curTime = DateTime.Now.ToString("g");
             DataManager.instance.curPlayer.date = curTime;
             DataManager.instance.saveData();
         }
+
         int curScene = DataManager.instance.curPlayer.curScene;
 
         SceneLoad.LoadScene(curScene);

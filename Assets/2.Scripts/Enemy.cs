@@ -204,6 +204,7 @@ public class Enemy : MonoBehaviour
             Instantiate(coin, gameObject.transform.position, Quaternion.identity);
             Instantiate(hpPotion, gameObject.transform.position, Quaternion.identity);
             Instantiate(mpPotion, gameObject.transform.position, Quaternion.identity);
+            Instantiate(tree, gameObject.transform.position, Quaternion.identity);
         }
         else if (rand == 1)
         {

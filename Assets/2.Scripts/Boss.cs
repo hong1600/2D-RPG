@@ -12,7 +12,7 @@ public class Boss : MonoBehaviour
 
     Vector2 dirVec;
     [SerializeField] float distance;
-    [SerializeField] bool tracking;
+    [SerializeField] bool isTracking = false;
     [SerializeField] float speed;
     [SerializeField] float curHp;
     [SerializeField] float maxHp;
@@ -20,7 +20,6 @@ public class Boss : MonoBehaviour
     bool isHurt;
     float moveDir;
     int nextMove;
-    bool nTracking;
     [SerializeField] bool attackReady;
     bool isAttack;
     float coolTime;
@@ -53,26 +52,70 @@ public class Boss : MonoBehaviour
     {
         move();
         checkPlayer();
-        turn();
         checkGround();
+        turn();
         cooltime();
     }
 
     private void move()
     {
-        if (tracking == false && isAttack == false && isHurt == false)
+        if (isTracking == false && isAttack == false && isHurt == false)
         {
             rigid.velocity = new Vector2(nextMove * speed, rigid.velocity.y);
         }
-        else if (tracking == true && isAttack == false && isHurt == false)
+        else if (isTracking == true && isAttack == false && isHurt == false)
         {
             rigid.velocity = new Vector2(moveDir * speed, rigid.velocity.y);
         }
-        else if (isAttack == true || isHurt == true) 
+        else if (isAttack == true || isHurt == true)
         {
             rigid.velocity = new Vector2(0, 0);
         }
     }
+    private void checkPlayer()
+    {
+        if (Player.instance.transform.position.x < transform.position.x)
+        {
+            dirVec = Vector2.left;
+            moveDir = -1f;
+        }
+        else if (Player.instance.transform.position.x > transform.position.x)
+        {
+            dirVec = Vector2.right;
+            moveDir = 1f;
+        }
+        else if (GameManager.instance == null)
+        { return; }
+
+        if (Physics2D.Raycast(transform.position, dirVec, distance, LayerMask.GetMask("Player")))
+        {
+            isTracking = true;
+            attackReady = true;
+        }
+        else
+        {
+            isTracking = false;
+            attackReady = false;
+        }
+
+    }
+
+    private void checkGround()
+    {
+        Vector2 frontVec = new Vector2(rigid.position.x + nextMove * 0.3f, rigid.position.y);
+        Debug.DrawRay(frontVec, Vector2.down * 0.6f, Color.red);
+
+        RaycastHit2D hit = Physics2D.Raycast(frontVec, Vector2.down * 0.6f, 1,
+            LayerMask.GetMask("Ground"));
+
+        if (hit.collider == null)
+        {
+            CancelInvoke();
+            nextMove *= -1;
+            Invoke("think", 2);
+        }
+    }
+
     private void turn()
     {
         if (rigid.velocity.x < 0)
@@ -97,59 +140,6 @@ public class Boss : MonoBehaviour
         nextMove = Random.Range(-1, 2);
 
         Invoke("think", 2);
-    }
-
-    private void checkPlayer()
-    {
-        if (Player.instance.transform.position.x < transform.position.x)
-        {
-            dirVec = Vector2.left;
-            moveDir = -1f;
-        }
-        else if (Player.instance.transform.position.x > transform.position.x)
-        {
-            dirVec = Vector2.right;
-            moveDir = 1f;
-        }
-        else if (GameManager.instance == null)
-        { return; }
-
-        if (Physics2D.BoxCast(transform.position, new Vector2(5, 3), 
-            0, new Vector2(0,0), LayerMask.GetMask("Player"))
-            && nTracking )
-        {
-            hpBar = true;
-            tracking = true;
-            attackReady = true;
-        }
-        else if (Physics2D.BoxCast(transform.position, new Vector2(5, 3),
-            0, new Vector2(0, 0), LayerMask.GetMask("Player")) == false)
-        {
-            tracking = false;
-            attackReady = false;
-        }
-    }
-
-
-    private void checkGround()
-    {
-        Vector2 frontVec = new Vector2(rigid.position.x + nextMove * 0.3f, rigid.position.y);
-        Debug.DrawRay(frontVec, Vector2.down * 0.6f, Color.red);
-
-        RaycastHit2D hit = Physics2D.Raycast(frontVec, Vector2.down * 0.6f, 1,
-            LayerMask.GetMask("Ground"));
-
-        if (hit.collider == null)
-        {
-            nTracking = true;
-            CancelInvoke();
-            nextMove *= -1;
-            Invoke("think", 2);
-        }
-        else if (hit.collider != null)
-        {
-            nTracking = false;
-        }
     }
 
     private void cooltime()

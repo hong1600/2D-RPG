@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
     public int coin;
     public int hpup = 0;
     public int mpup = 0;
+    public int gemNum = 0;
 
     [SerializeField] GameObject swordBox;
     [SerializeField] GameObject fireBall;
@@ -503,7 +504,6 @@ public class Player : MonoBehaviour
             StartCoroutine(knockBack(coll.gameObject));
         }
 
-
         if (coll.gameObject.CompareTag("Lander"))
         {
             isLander = true;
@@ -547,6 +547,16 @@ public class Player : MonoBehaviour
             DataManager.instance.curPlayer.mpUp += 1;
             Destroy(coll.gameObject);
         }
+        if (coll.collider.CompareTag("Gem"))
+        {
+            if (GameManager.instance.quest1 == true)
+            {
+                gemNum += 1;
+            }
+            QuestManager.Instance.quest1();
+            Destroy(coll.gameObject);
+        }
+
     }
 
     IEnumerator hurt(int damage)

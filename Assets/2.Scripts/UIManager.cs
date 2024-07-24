@@ -28,6 +28,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI curCoin;
     [SerializeField] TextMeshProUGUI Hpup;
     [SerializeField] TextMeshProUGUI Mpup;
+    [SerializeField] TextMeshProUGUI queset1Text;
 
     [SerializeField] GameObject bossHpBar;
     [SerializeField] TextMeshProUGUI BossHpText;
@@ -53,6 +54,7 @@ public class UIManager : MonoBehaviour
     {
         playerStat();
         statPanelOn();
+        quest();
     }
 
     private void playerStat()
@@ -107,4 +109,10 @@ public class UIManager : MonoBehaviour
         DataManager.instance.curPlayer.bgmVolume = bgmVolume.value;
         DataManager.instance.curPlayer.sfxVolume = sfxVolume.value;
     }
+
+    private void quest()
+    {
+        queset1Text.text = $"º¸¼® ({Player.instance.gemNum.ToString()} / 10)";
+    }
+
 }

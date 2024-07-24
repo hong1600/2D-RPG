@@ -15,10 +15,10 @@ public class ItemSlot : MonoBehaviour
             GameObject go = Instantiate(slotPrefabs, transform, false);
             go.name = "Slot" + i;
 
-            ItemSlotData slot = new ItemSlotData();
-            slot.isEmpty = true;
-            slot.slotObj = go;
-            slots.Add(go);
+            ///ItemSlotData slot = new ItemSlotData();
+            ///slot.isEmpty = true;
+            ///slot.slotObj = go;
+            ///slots.Add(go);
         }
     }
 }

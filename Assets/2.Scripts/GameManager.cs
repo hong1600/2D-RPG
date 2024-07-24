@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     public bool isAction = false;
     public int talkIndex;
 
+    public bool quest1;
+
     private void Awake()
     {
         if (instance == null)
@@ -49,6 +51,11 @@ public class GameManager : MonoBehaviour
         scanObject = scanObj;
         ObjData objData = scanObject.GetComponent<ObjData>();
         talk(objData.id, objData.isNpc);
+
+        if(objData.id == 3) 
+        {
+            quest1 = true;
+        }
 
         talkPanel.SetActive(isAction);
     }

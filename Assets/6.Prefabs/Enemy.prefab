@@ -104,10 +104,9 @@ MonoBehaviour:
   maxHp: 2
   kDistance: 2
   coin: {fileID: 2211482463824898107, guid: 2ffe174c3a30a784cbafc98dc70f09fe, type: 3}
-  tree: {fileID: 6979438420916629015, guid: 83a359cd1a8f1e740ad502586209b738, type: 3}
+  tree: {fileID: 5773679628568375189, guid: 69ff5d0eb083c5d4297bb82a2de31725, type: 3}
   hpPotion: {fileID: 953421883468054996, guid: afeddaf76fef0e64c944a4b19b5df329, type: 3}
   mpPotion: {fileID: 5657695099901799803, guid: d5ce77810e1acfd4dac0ccd654d4bb23, type: 3}
-  exp: 0
 --- !u!61 &8149615278531521517
 BoxCollider2D:
   m_ObjectHideFlags: 0

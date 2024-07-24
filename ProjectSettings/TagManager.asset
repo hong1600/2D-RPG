@@ -8,7 +8,6 @@ TagManager:
   - PlayerSword
   - Enemy
   - Coin
-  - Tree
   - Portal
   - PlayerSkill1
   - SecretRoom
@@ -27,6 +26,7 @@ TagManager:
   - BossHp
   - HpPotion
   - MpPotion
+  - Gem
   layers:
   - Default
   - TransparentFX
