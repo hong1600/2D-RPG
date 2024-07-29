@@ -27,6 +27,7 @@ TagManager:
   - HpPotion
   - MpPotion
   - Gem
+  - BossSpawner
   layers:
   - Default
   - TransparentFX

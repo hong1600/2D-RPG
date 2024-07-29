@@ -30,7 +30,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI Mpup;
     [SerializeField] TextMeshProUGUI queset1Text;
 
-    [SerializeField] GameObject bossHpBar;
+    [SerializeField] Slider bossHpBar;
     [SerializeField] TextMeshProUGUI BossHpText;
  
     bool staton;
@@ -55,6 +55,7 @@ public class UIManager : MonoBehaviour
         playerStat();
         statPanelOn();
         quest();
+        bossHp();
     }
 
     private void playerStat()
@@ -115,4 +116,10 @@ public class UIManager : MonoBehaviour
         queset1Text.text = $"º¸¼® ({Player.instance.gemNum.ToString()} / 10)";
     }
 
+    public Boss boss;
+    private void bossHp()
+    {
+        bossHpBar.value = boss.Curhp / boss.Maxhp;
+        BossHpText.text = $"{boss.Curhp.ToString()} / {boss.Maxhp.ToString()}";
+    }
 }

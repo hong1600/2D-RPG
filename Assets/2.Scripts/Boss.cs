@@ -23,7 +23,6 @@ public class Boss : MonoBehaviour
     [SerializeField] bool attackReady;
     bool isAttack;
     float coolTime;
-    bool hpBar = false;
 
     [SerializeField] GameObject bossSkill1;
     [SerializeField] Transform bossSkill1Trs;
@@ -33,8 +32,6 @@ public class Boss : MonoBehaviour
     { get { return curHp; } }
     public float Maxhp
     { get { return maxHp; } }
-    public bool Hpbar 
-    { get { return hpBar; } }
 
 
 

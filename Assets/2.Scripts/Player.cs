@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.Collections.LowLevel.Unsafe;
 
 public class Player : MonoBehaviour
 {
@@ -23,6 +24,9 @@ public class Player : MonoBehaviour
     public float curExp;
     public int skillPoint = 0;
     [SerializeField] float moveSpeed;
+    [SerializeField] float dashSpeed;
+    [SerializeField] float dashTime;
+    [SerializeField] float dashCool;
     [SerializeField] float jumpForce;
     [SerializeField] float dJumpForce;
     [SerializeField] float landerSpeed;
@@ -41,6 +45,8 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject meteors;
     [SerializeField] GameObject inventoryPanel;
     [SerializeField] GameObject diePanel;
+    [SerializeField] GameObject boss;
+    [SerializeField] GameObject bossHp;
     GameObject cutcam1;
     GameObject cutcam2;
     GameObject scanObject;
@@ -71,7 +77,9 @@ public class Player : MonoBehaviour
     public bool skill1on;
     public bool skill2on;
     public bool skill3on;
-
+    bool bossSpawn = false;
+    bool dashon = true;
+    //bool clickDash = false;
 
     [SerializeField] AudioClip attackclip;
     [SerializeField] AudioClip coinClip;
@@ -133,13 +141,15 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isDie) return;
-        move();
+        //if (isDie) return;
+        //move();
     }
 
     private void Update()
     {
         if (isDie) return;
+        move();
+        dash();
         turn();
         checkGround();
         jump();
@@ -189,6 +199,74 @@ public class Player : MonoBehaviour
         if (moveInput > 0) { dirVec = Vector2.right; }
         else if (moveInput < 0) { dirVec = Vector2.left; }
     }
+
+    private void dash()
+    {
+        //if(Input.GetKeyDown(KeyCode.LeftArrow))
+        //{
+        //    StartCoroutine(click());
+
+        //    if (Input.GetKeyDown(KeyCode.LeftArrow) && dashTime < 0 && clickDash == true)
+        //    {
+        //        moveSpeed = dashSpeed;
+        //        dashTime = 0.1f;
+        //    }
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.RightArrow))
+        //{
+        //    StartCoroutine(click());
+
+        //    if (Input.GetKeyDown(KeyCode.RightArrow) && dashTime < 0 && clickDash == true)
+        //    {
+        //        moveSpeed = dashSpeed;
+        //        dashTime = 0.1f;
+        //    }
+        //}
+        //dashTime -= Time.deltaTime;
+
+        //if(dashTime <= 0 ) 
+        //{
+        //    moveSpeed = 3.5f;
+        //}
+
+        if (Input.GetKey(KeyCode.LeftArrow) && Input.GetKeyDown(KeyCode.LeftShift) && dashon == true)
+        {
+            dashon = false;
+            moveSpeed = dashSpeed;
+            dashTime = 0.2f;
+            dashCool = 2;
+            anim.SetBool("isDash", true);
+        }
+        if (Input.GetKey(KeyCode.RightArrow) && Input.GetKeyDown(KeyCode.LeftShift) && dashon == true)
+        {
+            dashon = false;
+            moveSpeed = dashSpeed;
+            dashTime = 0.2f;
+            dashCool = 1;
+            anim.SetBool("isDash", true);
+        }
+        dashTime -= Time.deltaTime;
+        dashCool -= Time.deltaTime;
+        if (dashTime <= 0) 
+        {
+            anim.SetBool("isDash", false);
+            moveSpeed = 3.5f;
+        }
+        if(dashCool <= 0) 
+        {
+            dashon = true;
+        }
+    }
+
+    //IEnumerator click()
+    //{
+    //    clickDash = true;
+
+    //    yield return new WaitForSeconds(0.2f);
+
+    //    clickDash = false;
+    //}
 
     private void turn()
     {
@@ -455,6 +533,13 @@ public class Player : MonoBehaviour
 
             DataManager.instance.curPlayer.mpUp -= 1;
         }
+
+        if(Input.GetKeyDown(KeyCode.F) && bossSpawn == true && gemNum >= 10f) 
+        {
+            Instantiate(boss, new Vector2(5.8f, 12f), Quaternion.identity);
+            gemNum -= 10;
+            bossHp.SetActive(true);
+        }
     }
 
     private void lander()
@@ -508,6 +593,11 @@ public class Player : MonoBehaviour
         {
             isLander = true;
         }
+
+        if (coll.gameObject.CompareTag("BossSpawner"))
+        {
+            bossSpawn = true;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D coll)
@@ -515,6 +605,11 @@ public class Player : MonoBehaviour
         if (coll.gameObject.CompareTag("Lander"))
         {
             isLander = false;
+        }
+
+        if (coll.gameObject.CompareTag("BossSpawner"))
+        {
+            bossSpawn = false;
         }
     }
 

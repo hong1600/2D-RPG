@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] float maxHp;
     [SerializeField] float kDistance;
     [SerializeField] GameObject coin;
-    [SerializeField] GameObject tree;
+    [SerializeField] GameObject gem;
     [SerializeField] GameObject hpPotion;
     [SerializeField] GameObject mpPotion;
     int nextMove;
@@ -204,7 +204,7 @@ public class Enemy : MonoBehaviour
             Instantiate(coin, gameObject.transform.position, Quaternion.identity);
             Instantiate(hpPotion, gameObject.transform.position, Quaternion.identity);
             Instantiate(mpPotion, gameObject.transform.position, Quaternion.identity);
-            Instantiate(tree, gameObject.transform.position, Quaternion.identity);
+            Instantiate(gem, gameObject.transform.position, Quaternion.identity);
         }
         else if (rand == 1)
         {
@@ -219,6 +219,7 @@ public class Enemy : MonoBehaviour
         else if (rand == 3)
         {
             Instantiate(coin, gameObject.transform.position, Quaternion.identity);
+            Instantiate(gem, gameObject.transform.position, Quaternion.identity);
         }
 
         yield return new WaitForSeconds(1.5f);

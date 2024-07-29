@@ -45,4 +45,9 @@ public class MainBtnManager : MonoBehaviour
     {
         namePanel.SetActive(true);
     }
+
+    public void dataPanelExit()
+    {
+        dataPanel.SetActive(false);
+    }
 }

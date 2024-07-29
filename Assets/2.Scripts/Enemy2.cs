@@ -12,6 +12,10 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] GameObject attack1Box;
     [SerializeField] GameObject coin;
     [SerializeField] GameObject skill1;
+    [SerializeField] GameObject gem;
+    [SerializeField] GameObject hpPotion;
+    [SerializeField] GameObject mpPotion;
+
 
     [SerializeField] Transform skill1Pos1;
     [SerializeField] Transform skill1Pos2;
@@ -212,7 +216,31 @@ public class Enemy2 : MonoBehaviour
         sprite.color = Color.red;
         rigid.velocity = new Vector2(0, 2f);
         anim.SetTrigger("isDie");
-        Instantiate(coin, gameObject.transform.position, Quaternion.identity);
+        int rand = Random.Range(0, 4);
+
+        if (rand == 0)
+        {
+            Instantiate(coin, gameObject.transform.position, Quaternion.identity);
+            Instantiate(hpPotion, gameObject.transform.position, Quaternion.identity);
+            Instantiate(mpPotion, gameObject.transform.position, Quaternion.identity);
+            Instantiate(gem, gameObject.transform.position, Quaternion.identity);
+        }
+        else if (rand == 1)
+        {
+            Instantiate(coin, gameObject.transform.position, Quaternion.identity);
+            Instantiate(hpPotion, gameObject.transform.position, Quaternion.identity);
+        }
+        else if (rand == 2)
+        {
+            Instantiate(coin, gameObject.transform.position, Quaternion.identity);
+            Instantiate(mpPotion, gameObject.transform.position, Quaternion.identity);
+        }
+        else if (rand == 3)
+        {
+            Instantiate(coin, gameObject.transform.position, Quaternion.identity);
+            Instantiate(gem, gameObject.transform.position, Quaternion.identity);
+        }
+
 
         yield return new WaitForSeconds(1f);
 
